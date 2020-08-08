@@ -8,5 +8,4 @@ engine = create_engine(DATABASE_URI)
 
 Base = declarative_base()
 
-
 Base.metadata.create_all(engine)
