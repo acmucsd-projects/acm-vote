@@ -1,8 +1,7 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from initialize import Base
 from sqlalchemy import Column, Integer, String, Boolean
 
-Base = declarative_base()
+
 
 class votes(Base):
    __tablename__ = 'votes'
