@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 
-from sqlalchemy import Column, Integer, String, Boolean, DATETIME
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import JSON, ARRAY
 
 from config import DATABASE_URL
@@ -18,7 +18,7 @@ class election(Base):
     hasVoted = Column(JSON) # ids of users who have voted in this election w/ timestamp
     active = Column(Boolean)
     creator = Column(Integer)
-    deadline = Column(DATETIME)
+    deadline = Column(DateTime)
 
 class question(Base):
     __tablename__ = 'question'

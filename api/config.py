@@ -1,1 +1,1 @@
-DATABASE_URI = 'postgres+psycopg2://<USERNAME>:<PASSWORD>@<IP_ADDRESS>:<PORT>/<DATABASE_NAME>'
+DATABASE_URL = 'postgres+psycopg2://acmvote:test@localhost:5432/vote'
