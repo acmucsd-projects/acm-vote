@@ -24,7 +24,7 @@ const PageLayout = (props) => {
 
     return(
         <div>
-            <Header imgLink="profile.png"/>
+            <Header/>
             {props.children}
         </div>
     )
