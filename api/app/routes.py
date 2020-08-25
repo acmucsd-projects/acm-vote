@@ -1,5 +1,8 @@
 from . import app
 
+@app.route('/api/user', methods=['GET'])
+def getAllVoters():
+    return "Hello, World!"
 
 @app.route('/api/user/<uuid>', methods=['GET'])
 def getVoterInfo(uuid):
@@ -29,10 +32,18 @@ def editElection(uuid):
 def activateElection(uuid):
     return "Hello, World!"
 
-@app.route('/api/election/<uuid>/vote', methods=['PUT'])
+@app.route('/api/election/<uuid>/vote', methods=['POST'])
 def voteElection(uuid):
     return "Hello, World!"
 
-@app.route('/api/election/<uuid>/result', methods=['PUT'])
+@app.route('/api/election/<uuid>/results', methods=['GET'])
 def getElectionResults(uuid):
+    return "Hello, World!"
+
+@app.route('/api/election/<uuid>/verify', methods=['GET'])
+def verifyElectionResults(uuid):
+    return "Hello, World!"
+
+@app.route('/api/election/<uuid>/audit', methods=['GET'])
+def auditElectionResults(uuid):
     return "Hello, World!"

@@ -1,1 +1,0 @@
-DATABASE_URL = 'postgres+psycopg2://acmvote:test@localhost:5432/vote'
