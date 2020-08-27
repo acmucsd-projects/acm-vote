@@ -2,39 +2,42 @@ import React, { useState } from 'react';
 import './PollBody.css';
 
 const PollBody = () => {
-    const [currPage, setCurrPage] = useState('basicInformation');
+    const [currPage, setCurrPage] = useState(0);
     const [privacy, setPrivacy] = useState('private');
 
+    /* Use an array to store page names to make the code more concise :0 */
+    const pageNames = ['basicInformation', 'setPrivacy-1', 'setPrivacy-2', 'setPrivacy-3', 
+                        'setAnswerOptions', 'confirmDetails', 'expiration'];
+
     /* Returns whether a section is currently visible */
-    const getVisibility = (pageName) => {
-        let classStr = pageName === currPage ? "visible" : "hidden";
-        console.log(classStr);
-        return classStr;
+    const getVisibility = (pageNumber) => {
+        return pageNumber === currPage ? "visible" : "hidden";
     }
 
     /* Returns the title of the current page */
     const getTitle = () => {
-        if (currPage === 'basicInformation') { return "Create Poll"; }
-        else if (currPage === 'setPrivacy-1' || currPage === 'setPrivacy-2' || currPage === 'setPrivacy-3') { return "Set Privacy"; }
-        else if (currPage === 'setAnswerOptions') { return "Set Answer Options"; }
-        else if (currPage === 'confirmDetails') { return "Confirm Details"; }
-        else if (currPage === 'expiration') { return "Expiration"; }
+        if (currPage == 0) { return "Create Poll"; }
+        else if (currPage <= 3) { return "Set Privacy"; }
+        else if (currPage === 4) { return "Set Answer Options"; }
+        else if (currPage === 5) { return "Confirm Details"; }
+        else if (currPage === 6) { return "Expiration"; }
         return "Invalid Page";
     }
 
     /* Top Button: Title */
     const getTopButtonText = () => {
-        if(currPage === 'confirmDetails'){return "Finish";}
+        if(currPage == 5){return "Finish";}
         return "Continue";
     }
 
     /* Top button function: Continuing to next page */
     const continueToNextPage = () => {
         // This is a special case because we will proceed to different pages depending on privacy settings
-        if(currPage === 'basicInformation'){
-            if(privacy === 'private'){setCurrPage('setPrivacy-1');}
-            else{setCurrPage('setAnswerOptions');}
+        if(currPage == 0){
+            if(privacy === 'private'){setCurrPage(1);}
+            else{setCurrPage(4);}
         }
+        else{setCurrPage(currPage + 1);}
     }
 
     /* Top button function: Creating the Poll */
@@ -44,13 +47,13 @@ const PollBody = () => {
 
     /* Top button: Determines which function to execute depending on the current page */
     const topButtonFunction = () => {
-        if(currPage === 'confirmDetails'){createPoll();}
+        if(currPage == 4){createPoll();}
         else{continueToNextPage();}
     }
 
     /* Bottom button: title */
     const getBottomButtonText = () => {
-        if(currPage === 'basicInformation'){return "Cancel";}
+        if(currPage === 0){return "Cancel";}
         return "Back";
     }
 
@@ -62,15 +65,16 @@ const PollBody = () => {
     /* Bottom button function: Goes back */
     const goBacktoLastPage = () => {
         // Special handling of Page 'Set Answer Options'
-        if(currPage === 'setAnswerOptions'){
-            if(privacy === 'private') {setCurrPage('setPrivacy-3');}
-            else {setCurrPage('basicInformation');}
+        if(currPage == 4){
+            if(privacy === 'private') {setCurrPage(3);}
+            else {setCurrPage(0);}
         }
+        else{setCurrPage(currPage - 1);}
     }
 
     /* Bottom button: Determines which function to execute depending on the current page */
     const bottomButtonFunction = () => {
-        if(currPage === 'basicInformation') {cancelCreation();}
+        if(currPage === 0) {cancelCreation();}
         else {goBacktoLastPage();}
     }
 
@@ -89,7 +93,7 @@ const PollBody = () => {
 
         // The first page defining basic meeting information
         return (
-            <div className={getVisibility('basicInformation')}>
+            <div className={getVisibility(0)}>
                 <input className="create-poll-field" name="name" placeholder="Name" />
                 <input className="create-poll-field" name="description" placeholder="Description" />
                 <select className="create-poll-field create-poll-field-select" name="type">
