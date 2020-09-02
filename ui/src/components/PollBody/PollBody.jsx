@@ -1,12 +1,47 @@
 import React, { useState } from 'react';
+import AutoSuggest from 'react-autosuggest';
 import './PollBody.css';
+
+/* Hard-coded voter info for autosuggest's sake */
+const voters = [
+    {
+        name: 'Matei',
+        email: 'matei@acmucsd.org'
+    },
+    {
+        name: 'Paul',
+        email: 'paul@acmucsd.org'
+    },
+    {
+        name: 'Michele',
+        email: 'michele@acmucsd.org'
+    },
+    {
+        name: 'Tyler',
+        email: 'tyler@acmucsd.org'
+    },
+    {
+        name: 'Michael',
+        email: 'michael@acmucsd.org'
+    },
+    {
+        name: 'Dhruv',
+        email: 'dhruv@acmucsd.org'
+    },
+    {
+        name: 'Maggie',
+        email: 'maggie@acmucsd.org'
+    }
+]
 
 const PollBody = () => {
     const [currPage, setCurrPage] = useState(0);
     const [privacy, setPrivacy] = useState('private');
+    const [value, setValue] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
 
     /* Use an array to store page names to make the code more concise :0 */
-    const pageNames = ['basicInformation', 'setPrivacy', 'confirmDetails', 'expiration'];
+    const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options','Confirm Details', 'Expiration'];
 
     /* Returns whether a section is currently visible */
     const getVisibility = (pageNumber) => {
@@ -15,11 +50,7 @@ const PollBody = () => {
 
     /* Returns the title of the current page */
     const getTitle = () => {
-        if (currPage == 0) { return "Create Poll"; }
-        else if (currPage == 1) { return "Set Privacy"; }
-        else if (currPage === 2) { return "Set Answer Options"; }
-        else if (currPage === 3) { return "Confirm Details"; }
-        else if (currPage === 4) { return "Expiration"; }
+        if(currPage <= 4) {return pageNames[currPage];}
         return "Invalid Page";
     }
 
@@ -119,12 +150,73 @@ const PollBody = () => {
     }
 
     // The first out of two pages to set privacy of the poll, if set to be private
+    const selectVoters = () => {
+        
+
+        /* Autosuggest function to run to get suggestions */
+        const getSuggestions = (value) => {
+            const inputValue = value.toLowerCase();
+            console.log(inputValue);
+            const inputLength = value.length;
+
+            console.log('suggestions: ' + JSON.stringify(voters.filter(voter => voter.name.toLowerCase().includes(inputValue))));
+            return inputLength === 0 ? [] :
+            voters.filter(voter => voter.name.toLowerCase().includes(inputValue));
+        }
+
+        /* Determinds what part of the suggestion gets displayed (?) */
+        const getSuggestionValue = (voter) => voter.name;
+
+        /* Renders the suggestions */
+        const renderSuggestion = (suggestion) => {
+            console.log(suggestion);
+            return (
+                suggestions.some(e => e.name === suggestion.name) &&
+                <div>{suggestion.name} ({suggestion.email})</div>
+            );
+        }
+
+        /* Autosuggest function to run when suggestion is updated */
+        const onSuggestionFetchRequested = ({value}) => {
+            console.log(suggestions);
+            setSuggestions(getSuggestions(value));
+        }
+
+        /* Autosuggest function to run when suggestion is cleared */
+        const onSuggestionClearRequested = () => {setSuggestions([]);}
+
+        /* Autosuggest function when input function changes */
+        const onChange = (e, {newValue}) => {
+            setValue(newValue);
+        }
+
+        /* Properties of the input box */
+        const inputProps = {
+            placeholder: 'Type a name here...',
+            value,
+            onChange: onChange
+        }
+
+        return(
+            <div className={getVisibility(1)}>
+            <AutoSuggest
+             suggestions={voters}
+             onSuggestionsFetchRequested={onSuggestionFetchRequested}
+             onSuggestionsClearRequested={onSuggestionClearRequested}
+             getSuggestionValue={getSuggestionValue}
+             renderSuggestion={renderSuggestion}
+             inputProps={inputProps}
+             />
+             </div>
+        );
+    }
 
     return (
         <div className="poll-body">
             <h1>{getTitle(currPage)}</h1>
             <form>
                 {basicInformation()}
+                {selectVoters()}
             </form>
             <div className="nav-buttons">
             <button className="create-poll-field nav-button" id="top-button" onClick={topButtonFunction}>

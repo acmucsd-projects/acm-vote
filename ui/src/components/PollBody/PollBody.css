@@ -19,7 +19,6 @@
 
 .create-poll-field:focus {
     border-color: #80bfff;
-    border: 1px solid #80bfff;
 }
 
 .create-poll-field-select {
@@ -36,6 +35,42 @@
     width: 80vw;
     height: 5vh;
     text-align: left;
+}
+
+.react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.react-autosuggest__input {
+    width: 80vw;
+    height: 10vh;
+    background-color: #f2f2f2;
+    border: 1px solid #BDBDBD;
+    padding: 0 1vw;
+    border-radius: 5px;
+    outline: none;
+}
+
+.react-autosuggest__input--focused {
+    border-color: #80bfff;
+}
+
+.react-autosuggest__suggestions-container--open {
+    display: block;
+    width: 80vw;
+    margin-left: 9vw;
+    border: 1px solid #BDBDBD;
+}
+
+.react-autosuggest__suggestion {
+    cursor: pointer;
+    margin: 2vh 0;
+}
+
+.react-autosuggest__suggestion--highlighted {
+    background-color: #dddddd;
 }
 
 .nav-buttons {
