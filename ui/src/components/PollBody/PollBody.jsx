@@ -1,44 +1,14 @@
 import React, { useState } from 'react';
 import AutoSuggest from 'react-autosuggest';
+import members from '../../data/voters.json';
 import './PollBody.css';
-
-/* Hard-coded voter info for autosuggest's sake */
-const voters = [
-    {
-        name: 'Matei',
-        email: 'matei@acmucsd.org'
-    },
-    {
-        name: 'Paul',
-        email: 'paul@acmucsd.org'
-    },
-    {
-        name: 'Michele',
-        email: 'michele@acmucsd.org'
-    },
-    {
-        name: 'Tyler',
-        email: 'tyler@acmucsd.org'
-    },
-    {
-        name: 'Michael',
-        email: 'michael@acmucsd.org'
-    },
-    {
-        name: 'Dhruv',
-        email: 'dhruv@acmucsd.org'
-    },
-    {
-        name: 'Maggie',
-        email: 'maggie@acmucsd.org'
-    }
-]
 
 const PollBody = () => {
     const [currPage, setCurrPage] = useState(0);
     const [privacy, setPrivacy] = useState('private');
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const [voters, setVoters] = useState([]);
 
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options','Confirm Details', 'Expiration'];
@@ -108,7 +78,7 @@ const PollBody = () => {
         else {goBacktoLastPage();}
     }
 
-    /* The following sections define the pages of the form separately for display reasons */
+    /*-----------------------------------------BASIC INFO PAGE-------------------------------------- */
     const basicInformation = () => {
         /* Changes the type of the "date" input to "date" */
         const changeTypeToDate = (e) => {
@@ -149,29 +119,30 @@ const PollBody = () => {
         );
     }
 
-    // The first out of two pages to set privacy of the poll, if set to be private
+    /*-----------------------------------------SELECT VOTERS PAGE-------------------------------------- */
     const selectVoters = () => {
         
-
         /* Autosuggest function to run to get suggestions */
         const getSuggestions = (value) => {
             const inputValue = value.toLowerCase();
             console.log(inputValue);
             const inputLength = value.length;
 
-            console.log('suggestions: ' + JSON.stringify(voters.filter(voter => voter.name.toLowerCase().includes(inputValue))));
+            console.log('suggestions: ' + JSON.stringify(members.filter(member => member.name.toLowerCase().includes(inputValue))));
             return inputLength === 0 ? [] :
-            voters.filter(voter => voter.name.toLowerCase().includes(inputValue));
+            members.filter(member => member.name.toLowerCase().includes(inputValue));
         }
 
-        /* Determinds what part of the suggestion gets displayed (?) */
+        /* Clears the input field after selecting an option */
         const getSuggestionValue = (voter) => "";
 
         /* Renders the suggestions */
         const renderSuggestion = (suggestion) => {
             return (
                 suggestions.some(e => e.name === suggestion.name) &&
-                <div className="autosuggest-suggestion">{suggestion.name} <span>({suggestion.email})</span></div>
+                <div className="autosuggest-suggestion" onClick={() => console.log('Clicked ' + suggestion.name)}>
+                    {suggestion.name} <span>({suggestion.email})</span>
+                </div>
             );
         }
 
@@ -199,7 +170,7 @@ const PollBody = () => {
         return(
             <div className={getVisibility(1)}>
             <AutoSuggest
-             suggestions={voters}
+             suggestions={members}
              onSuggestionsFetchRequested={onSuggestionFetchRequested}
              onSuggestionsClearRequested={onSuggestionClearRequested}
              getSuggestionValue={getSuggestionValue}
@@ -210,6 +181,7 @@ const PollBody = () => {
         );
     }
 
+    /* The actual body of the poll */
     return (
         <div className="poll-body">
             <h1>{getTitle(currPage)}</h1>
