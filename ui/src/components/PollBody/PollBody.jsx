@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AutoSuggest from 'react-autosuggest';
+import Voter from '../../components/Voter/Voter';
 import members from '../../data/voters.json';
 import './PollBody.css';
 
@@ -133,14 +134,37 @@ const PollBody = () => {
             members.filter(member => member.name.toLowerCase().includes(inputValue));
         }
 
-        /* Clears the input field after selecting an option */
+        /* Autosugget function that clears the input field after selecting an option */
         const getSuggestionValue = (voter) => "";
 
-        /* Renders the suggestions */
+        /* Adds a selected suggestion to voters */
+        const addVoter = (voter) => {
+            let updatedVoters = voters;
+            updatedVoters.push(voter);
+            setVoters(updatedVoters);
+            console.log(voters);
+        }
+
+        /* Removes a voter */
+        const removeVoter = (voterId) => {
+            console.log("Remove voter called on id: " + voterId);
+            let updatedVoters = voters;
+            let ind = 0;
+            while(ind < updatedVoters.length) {
+                if(updatedVoters[ind].id === voterId) {
+                    updatedVoters.splice(ind, 1);
+                    break;
+                }
+                ind++;
+            }
+            setVoters(updatedVoters);
+        }
+
+        /* Autosuggest function that renders the suggestions */
         const renderSuggestion = (suggestion) => {
             return (
                 suggestions.some(e => e.name === suggestion.name) &&
-                <div className="autosuggest-suggestion" onClick={() => console.log('Clicked ' + suggestion.name)}>
+                <div className="autosuggest-suggestion" onClick={() => addVoter(suggestion)}>
                     {suggestion.name} <span>({suggestion.email})</span>
                 </div>
             );
@@ -177,6 +201,9 @@ const PollBody = () => {
              renderSuggestion={renderSuggestion}
              inputProps={inputProps}
              />
+            <table className="poll-voter-table">
+                <Voter name="Maggie" id={7} removeVoter={removeVoter} />
+            </table>
              </div>
         );
     }
