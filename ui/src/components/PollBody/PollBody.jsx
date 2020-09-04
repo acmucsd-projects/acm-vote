@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AutoSuggest from 'react-autosuggest';
-import Voter from '../../components/Voter/Voter';
+import Voter from '../Voter/Voter';
+import AnswerOption from '../AnswerOption/AnswerOption';
 import members from '../../data/voters.json';
 import './PollBody.css';
 
@@ -9,14 +10,20 @@ const PollBody = () => {
     const [privacy, setPrivacy] = useState('private');
     const [value, setValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+
+    const [pollTitle, setPollTitle] = useState("");
+    const [pollDescription, setPollDescription] = useState("");
+    const [pollType, setPollType] = useState("");
+    const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
+    const [options, setOptions] = useState([]);
 
     /* Note to readers: I kind of can't put the pages of the form as their own components? 
-     * Because we need to be able to access all the input values on form submit right
+     * Because we need to be able to access all the input values on form submit right :0
      * But this code does look really messy with that layout especially since useEffect and useState
      * Can only be put on the outermost layer, so if you have an idea of how to change the structure
      * Please do let me know and I will change it for sure!
-     * /
+     */
 
     /* Removes a voter */
     const removeVoter = (voterId) => {
@@ -128,17 +135,33 @@ const PollBody = () => {
             e.target.type = "text";
         }
 
+        const updatePollTitle = (e) => {
+            setPollTitle(e.target.value);
+        }
+
+        const updatePollDescription = (e) => {
+            setPollDescription(e.target.value);
+        }
+
+        const updatePollType = (e) => {
+            setPollType(e.target.value);
+        }
+
+        const updatePollExpiration = (e) => {
+            setPollExpiration(e.target.value);
+        }
+
         // The first page defining basic meeting information
         return (
             <div className={getVisibility(0)}>
-                <input className="create-poll-field" name="name" placeholder="Name" />
-                <input className="create-poll-field" name="description" placeholder="Description" />
-                <select className="create-poll-field create-poll-field-select" name="type">
+                <input className="create-poll-field" onBlur={updatePollTitle} name="name" placeholder="Name" />
+                <input className="create-poll-field" onBlur={updatePollDescription} name="description" placeholder="Description" />
+                <select className="create-poll-field create-poll-field-select" onBlur={updatePollType}name="type">
                     <option value="" disabled selected>Poll Type</option>
-                    <option value="type1">Public</option>
-                    <option value="type2">Private</option>
+                    <option value="type1">Multiple Choice</option>
+                    <option value="type2">Ranked Choice</option>
                 </select>
-                <input className="create-poll-field" name="date" type="text"
+                <input className="create-poll-field" onBlur={updatePollExpiration} name="date" type="text"
                     onFocus={changeTypeToDate} onBlur={changeTypeToText}
                     placeholder="What is the last day to vote?" />
                 <p>Do you want to create a Private or Public poll?</p>
@@ -234,6 +257,18 @@ const PollBody = () => {
         );
     }
 
+    /*-----------------------------------------SET ANSWER OPTIONS PAGE-------------------------------------- */
+    const setAnswerOptions = () => {
+        return (
+            <div className={getVisibility(2)}>
+                <p><span className="create-poll-bold">Title:{'\u00A0'}</span>{pollTitle}</p>
+                <p><span className="create-poll-bold">Description:{'\u00A0'}</span>{pollDescription}</p>
+                <AnswerOption />
+                <AnswerOption />
+                <button id="add-answer-button">Add answer</button>
+            </div>
+        )
+    }
     /* The actual body of the poll */
     return (
         <div className="poll-body">
@@ -241,6 +276,7 @@ const PollBody = () => {
             <form>
                 {basicInformation()}
                 {selectVoters()}
+                {setAnswerOptions()}
             </form>
             <div className="nav-buttons">
                 <button className="create-poll-field nav-button" id="top-button" onClick={topButtonFunction}>
