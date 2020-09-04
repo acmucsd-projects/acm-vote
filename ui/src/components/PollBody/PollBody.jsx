@@ -56,14 +56,14 @@ const PollBody = () => {
 
     /* Top Button: Title */
     const getTopButtonText = () => {
-        if(currPage == 3){return "Finish";}
+        if(currPage === 3){return "Finish";}
         return "Continue";
     }
 
     /* Top button function: Continuing to next page */
     const continueToNextPage = () => {
         // This is a special case because we will proceed to different pages depending on privacy settings
-        if(currPage == 0){
+        if(currPage === 0){
             if(privacy === 'private'){setCurrPage(1);}
             else{setCurrPage(2);}
         }
@@ -77,7 +77,7 @@ const PollBody = () => {
 
     /* Top button: Determines which function to execute depending on the current page */
     const topButtonFunction = () => {
-        if(currPage == 3){createPoll();}
+        if(currPage === 3){createPoll();}
         else{continueToNextPage();}
     }
 
@@ -95,7 +95,7 @@ const PollBody = () => {
     /* Bottom button function: Goes back */
     const goBacktoLastPage = () => {
         // Special handling of Page 'Set Answer Options'
-        if(currPage == 2){
+        if(currPage === 2){
             if(privacy === 'private') {setCurrPage(1);}
             else {setCurrPage(0);}
         }
@@ -165,14 +165,13 @@ const PollBody = () => {
         }
 
         /* Determinds what part of the suggestion gets displayed (?) */
-        const getSuggestionValue = (voter) => voter.name;
+        const getSuggestionValue = (voter) => "";
 
         /* Renders the suggestions */
         const renderSuggestion = (suggestion) => {
-            console.log(suggestion);
             return (
                 suggestions.some(e => e.name === suggestion.name) &&
-                <div>{suggestion.name} ({suggestion.email})</div>
+                <div className="autosuggest-suggestion">{suggestion.name} <span>({suggestion.email})</span></div>
             );
         }
 

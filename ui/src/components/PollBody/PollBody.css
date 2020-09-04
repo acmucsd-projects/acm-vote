@@ -64,9 +64,16 @@
     border: 1px solid #BDBDBD;
 }
 
+.autosuggest-suggestion {
+    padding: 2vh 0;
+}
+
+.autosuggest-suggestion span {
+    color: #999999;
+}
+
 .react-autosuggest__suggestion {
     cursor: pointer;
-    margin: 2vh 0;
 }
 
 .react-autosuggest__suggestion--highlighted {
