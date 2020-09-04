@@ -5,7 +5,7 @@ import './style.css';
 
 const CreatePoll = () => {
     const pollBody = () => {return <PollBody/>;}
-    return <PageLayout children={pollBody} />
+    return <PageLayout children={pollBody()} />
 }
 
 export default CreatePoll;

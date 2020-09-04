@@ -1,7 +1,5 @@
-.poll-voter {
-    margin-left: 9vw;
-    width: 80vw;
-    padding: 2vh 0;
+.poll-voter-row {
+    height: 6vh;
 }
 
 .poll-voter-id {

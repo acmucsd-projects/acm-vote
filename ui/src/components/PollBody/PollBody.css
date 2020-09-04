@@ -17,6 +17,10 @@
     margin-bottom: 2vh;
 }
 
+.create-poll-bold {
+    font-weight: 600;
+}
+
 .create-poll-field:focus {
     border-color: #80bfff;
 }
@@ -78,6 +82,10 @@
 
 .react-autosuggest__suggestion--highlighted {
     background-color: #dddddd;
+}
+
+.poll-voter-table {
+    margin: 0 0 2vw 9vw;
 }
 
 .nav-buttons {

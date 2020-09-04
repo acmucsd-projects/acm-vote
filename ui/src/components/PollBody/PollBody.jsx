@@ -209,9 +209,10 @@ const PollBody = () => {
             value,
             onChange: onChange
         }
-        
+
         return (
             <div className={getVisibility(1)}>
+                <p className="create-poll-bold">Add Voters</p>
                 <AutoSuggest
                     suggestions={members}
                     onSuggestionsFetchRequested={onSuggestionFetchRequested}
@@ -221,8 +222,14 @@ const PollBody = () => {
                     inputProps={inputProps}
                 />
                 <table className="poll-voter-table">
-                    {voterList}
+                    <tbody>
+                        {voterList}
+                    </tbody>
                 </table>
+                <div className="radio-containers">
+                <input name="notify" type="checkbox"/> 
+                <label for="notify">Send email notifications reminding people to vote</label>
+                </div>
             </div>
         );
     }
