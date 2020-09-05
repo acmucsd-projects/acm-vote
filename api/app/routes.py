@@ -1,5 +1,6 @@
 from . import app
 from . import models
+import json
 
 @app.route('/api/user', methods=['GET'])
 def getAllVoters():

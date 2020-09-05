@@ -12,6 +12,7 @@ This project follows a standard structure for Flask apps.
 pipenv sync
 ```
 3. (Only needs to be done once) Rename config_temp.py to config.py and fill in you postgres port, account, and datebase to be used
+4. Run `pipenv shell` to be inside the virtual environment and then run `python initalize.py` to create the proper models in the database.
 4. Run any of the provided scripts in the Pipfile. To run the testing server, use:
 ```bash
 pipenv run server

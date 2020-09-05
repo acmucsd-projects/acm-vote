@@ -35,5 +35,4 @@ class user(db.Model):
     canVote = db.Column(ARRAY(db.Integer)) # id numbers of whitelisted elections
 
     boardMember = db.Column(db.Boolean)
-    email = db.Column(db.String)
 
