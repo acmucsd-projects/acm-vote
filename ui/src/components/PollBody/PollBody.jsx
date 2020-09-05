@@ -17,10 +17,9 @@ const PollBody = () => {
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
     const [optionInds, setOptionInds] = useState([1, 2]);
-    const [updateOptions, setUpdateOptions] = useState(0); // BAD PRACTICE ;-;
+    const [numForceUpdates, setNumForceUpdates] = useState(0); // BAD PRACTICE ;-;
     const [options, setOptions] = useState([]);
 
-    let numOptions = 2;
 
     /* Note to readers: I kind of can't put the pages of the form as their own components? 
      * Because we need to be able to access all the input values on form submit right :0
@@ -28,40 +27,6 @@ const PollBody = () => {
      * Can only be put on the outermost layer, so if you have an idea of how to change the structure
      * Please do let me know and I will change it for sure!
      */
-
-    /* Removes a voter */
-    const removeVoter = (voterId) => {
-        console.log("Remove voter called on id: " + voterId);
-        let updatedVoters = voters;
-        let ind = 0;
-        while (ind < updatedVoters.length) {
-            if (updatedVoters[ind].id === voterId) {
-                updatedVoters.splice(ind, 1);
-                break;
-            }
-            ind++;
-        }
-        console.log("Updated Voters after remove: " + updatedVoters);
-        setVoters(updatedVoters);
-        setUpdateOptions(updateOptions+1);
-    }
-
-    let numVoters = 0;
-    let voterList = voters.map((voter) => {
-        return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
-    })
-    let optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
-
-    /* Reloads the list of voters on voters change and optionList on optionInds change */
-    useEffect(() => {
-        numVoters = 0;
-        voterList = voters.map((voter) => {
-            return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
-        })
-        console.log("In useEffect");
-        console.log("optionList: " + optionList);
-        optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
-    }, [voters, optionInds])
 
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options', 'Confirm Details', 'Expiration'];
@@ -208,8 +173,27 @@ const PollBody = () => {
             let updatedVoters = voters;
             updatedVoters.push(voter);
             setVoters(updatedVoters);
-            console.log(voters);
         }
+
+    /* Removes a voter */
+    const removeVoter = (voterId) => {
+        let updatedVoters = voters;
+        let ind = 0;
+        while (ind < updatedVoters.length) {
+            if (updatedVoters[ind].id === voterId) {
+                updatedVoters.splice(ind, 1);
+                break;
+            }
+            ind++;
+        }
+        setVoters(updatedVoters);
+        setNumForceUpdates(numForceUpdates+1);
+    }
+
+    let numVoters = 0;
+    let voterList = voters.map((voter) => {
+        return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
+    })
 
 
         /* Autosuggest function that renders the suggestions */
@@ -271,11 +255,12 @@ const PollBody = () => {
 
         const addOption = () => {
             let updatedOptionInds = optionInds;
-            updatedOptionInds.push(++numOptions);
-            console.log("optionInds: " + optionInds);
+            updatedOptionInds.push(optionInds.length + 1);
             setOptionInds(updatedOptionInds);
-            setUpdateOptions(updateOptions + 1);
+            console.log(optionInds);
+            setNumForceUpdates(numForceUpdates + 1);
         }
+    let optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
 
         return (
             <div className={getVisibility(2)}>
