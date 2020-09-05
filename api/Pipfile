@@ -10,7 +10,8 @@ flask = "*"
 python-dotenv = "*"
 flask-migrate = "*"
 flask-sqlalchemy = "*"
-
+postgres = "*"
+psycopg2 = "*"
 [scripts]
 server = "flask run"
 
