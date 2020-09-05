@@ -17,6 +17,7 @@ const PollBody = () => {
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
     const [optionInds, setOptionInds] = useState([1, 2]);
+    const [updateOptions, setUpdateOptions] = useState(0); // BAD PRACTICE ;-;
     const [options, setOptions] = useState([]);
 
     let numOptions = 2;
@@ -42,6 +43,7 @@ const PollBody = () => {
         }
         console.log("Updated Voters after remove: " + updatedVoters);
         setVoters(updatedVoters);
+        setUpdateOptions(updateOptions+1);
     }
 
     let numVoters = 0;
@@ -138,7 +140,10 @@ const PollBody = () => {
 
         /* Changes the type of the "date" input to "text", if no date selected */
         const changeTypeToText = (e) => {
-            if (e.target.value) { return; }
+            if (e.target.value) { 
+                setPollExpiration(e.target.value);
+                return; 
+            }
             e.target.type = "text";
         }
 
@@ -151,11 +156,8 @@ const PollBody = () => {
         }
 
         const updatePollType = (e) => {
-            setPollType(e.target.value);
-        }
-
-        const updatePollExpiration = (e) => {
-            setPollExpiration(e.target.value);
+            if(e.target.value === 'multiple-choice') {setPollType('Multiple Choice');}
+            setPollType('Ranked Choice');
         }
 
         // The first page defining basic meeting information
@@ -165,10 +167,10 @@ const PollBody = () => {
                 <input className="create-poll-field" onBlur={updatePollDescription} name="description" placeholder="Description" />
                 <select className="create-poll-field create-poll-field-select" onBlur={updatePollType} name="type">
                     <option value="" disabled selected>Poll Type</option>
-                    <option value="type1">Multiple Choice</option>
-                    <option value="type2">Ranked Choice</option>
+                    <option value="multiple-choice">Multiple Choice</option>
+                    <option value="ranked-choice">Ranked Choice</option>
                 </select>
-                <input className="create-poll-field" onBlur={updatePollExpiration} name="date" type="text"
+                <input className="create-poll-field" name="date" type="text"
                     onFocus={changeTypeToDate} onBlur={changeTypeToText}
                     placeholder="What is the last day to vote?" />
                 <p>Do you want to create a Private or Public poll?</p>
@@ -271,8 +273,8 @@ const PollBody = () => {
             let updatedOptionInds = optionInds;
             updatedOptionInds.push(++numOptions);
             console.log("optionInds: " + optionInds);
-            setOptionInds([]);
             setOptionInds(updatedOptionInds);
+            setUpdateOptions(updateOptions + 1);
         }
 
         return (
@@ -284,6 +286,18 @@ const PollBody = () => {
             </div>
         )
     }
+
+    /*------------------------------------------CONFIRM DETAILS PAGE---------------------------------------- */
+    const confirmDetails = () => {
+        return (
+            <div className={getVisibility(3)}>
+                <p><span className="create-poll-bold">Title:{'\u00A0'}</span>{pollTitle}</p>
+                <p><span className="create-poll-bold">Description:{'\u00A0'}</span>{pollDescription}</p>
+                <p><span className="create-poll-bold">Poll Type:{'\u00A0'}</span>{pollType}</p>
+                <p><span className="create-poll-bold">Expiration:{'\u00A0'}</span>{pollExpiration}</p>
+            </div>
+        )
+    }
     /* ------------------------------------ The actual body of the poll ----------------------------------- */
     return (
         <div className="poll-body">
@@ -292,6 +306,7 @@ const PollBody = () => {
                 {basicInformation()}
                 {selectVoters()}
                 {setAnswerOptions()}
+                {confirmDetails()}
             </form>
             <div className="nav-buttons">
                 <button className="create-poll-field nav-button" id="top-button" onClick={topButtonFunction}>

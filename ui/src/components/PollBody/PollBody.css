@@ -89,12 +89,12 @@
 }
 
 #add-answer-button {
-    margin-top: 5vh;
+    margin: 5vh 0 0 40vw;
     background-color: #e5e5e5;
     width: 20vw;
-    height: 6vh;
+    padding: 2vh 0;
     border: 1px solid #e5e5e5;
-    border-radius: 3vh;
+    border-radius: 4vh;
 }
 
 #add-answer-button:hover {
