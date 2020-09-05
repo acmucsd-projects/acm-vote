@@ -1,0 +1,16 @@
+.header {
+    height:8vh;
+    max-height: 8vh;
+    min-width: 100%;
+    padding-top: 1vh;
+    top: 0px;
+    left: 0px;
+}
+
+.profile-pic {
+    max-height: 8vh;
+    max-width: 8vh;
+    margin-right: 5vw;
+    border-radius: 50%;
+    float: right;
+}
