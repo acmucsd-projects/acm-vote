@@ -1,12 +1,12 @@
 .create-poll-field-short {
-    width: 60vw;
+    width: 70vw;
     height: 10vh;
     background-color: #f2f2f2;
     border: 1px solid #BDBDBD;
     padding: 0 1vw;
     border-radius: 5px;
     outline: none;
-    margin: 0 0 2vh 20vw;
+    margin: 0 0 2vh 10vw;
 }
 
 .create-poll-field-short:focus {

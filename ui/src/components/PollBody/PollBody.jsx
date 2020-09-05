@@ -16,7 +16,10 @@ const PollBody = () => {
     const [pollType, setPollType] = useState("");
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
+    const [optionInds, setOptionInds] = useState([1, 2]);
     const [options, setOptions] = useState([]);
+
+    let numOptions = 2;
 
     /* Note to readers: I kind of can't put the pages of the form as their own components? 
      * Because we need to be able to access all the input values on form submit right :0
@@ -40,19 +43,23 @@ const PollBody = () => {
         console.log("Updated Voters after remove: " + updatedVoters);
         setVoters(updatedVoters);
     }
-    
+
     let numVoters = 0;
     let voterList = voters.map((voter) => {
         return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
     })
+    let optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
 
-    /* Reloads the list of voters on voters change */
+    /* Reloads the list of voters on voters change and optionList on optionInds change */
     useEffect(() => {
         numVoters = 0;
         voterList = voters.map((voter) => {
             return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
         })
-    }, [voters])
+        console.log("In useEffect");
+        console.log("optionList: " + optionList);
+        optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
+    }, [voters, optionInds])
 
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options', 'Confirm Details', 'Expiration'];
@@ -156,7 +163,7 @@ const PollBody = () => {
             <div className={getVisibility(0)}>
                 <input className="create-poll-field" onBlur={updatePollTitle} name="name" placeholder="Name" />
                 <input className="create-poll-field" onBlur={updatePollDescription} name="description" placeholder="Description" />
-                <select className="create-poll-field create-poll-field-select" onBlur={updatePollType}name="type">
+                <select className="create-poll-field create-poll-field-select" onBlur={updatePollType} name="type">
                     <option value="" disabled selected>Poll Type</option>
                     <option value="type1">Multiple Choice</option>
                     <option value="type2">Ranked Choice</option>
@@ -250,8 +257,8 @@ const PollBody = () => {
                     </tbody>
                 </table>
                 <div className="radio-containers">
-                <input name="notify" type="checkbox"/> 
-                <label for="notify">Send email notifications reminding people to vote</label>
+                    <input name="notify" type="checkbox" />
+                    <label for="notify">Send email notifications reminding people to vote</label>
                 </div>
             </div>
         );
@@ -259,17 +266,25 @@ const PollBody = () => {
 
     /*-----------------------------------------SET ANSWER OPTIONS PAGE-------------------------------------- */
     const setAnswerOptions = () => {
+
+        const addOption = () => {
+            let updatedOptionInds = optionInds;
+            updatedOptionInds.push(++numOptions);
+            console.log("optionInds: " + optionInds);
+            setOptionInds([]);
+            setOptionInds(updatedOptionInds);
+        }
+
         return (
             <div className={getVisibility(2)}>
                 <p><span className="create-poll-bold">Title:{'\u00A0'}</span>{pollTitle}</p>
                 <p><span className="create-poll-bold">Description:{'\u00A0'}</span>{pollDescription}</p>
-                <AnswerOption />
-                <AnswerOption />
-                <button id="add-answer-button">Add answer</button>
+                {optionList}
+                <div id="add-answer-button" onClick={addOption}>Add answer</div>
             </div>
         )
     }
-    /* The actual body of the poll */
+    /* ------------------------------------ The actual body of the poll ----------------------------------- */
     return (
         <div className="poll-body">
             <h1>{getTitle(currPage)}</h1>
