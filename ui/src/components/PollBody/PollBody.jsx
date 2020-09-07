@@ -57,6 +57,7 @@ const PollBody = () => {
             else { setCurrPage(2); }
         }
         else { setCurrPage(currPage + 1); }
+        window.scrollTo(0, 0);
     }
 
     /* Top button function: Creating the Poll */
@@ -89,6 +90,7 @@ const PollBody = () => {
             else { setCurrPage(0); }
         }
         else { setCurrPage(currPage - 1); }
+        window.scrollTo(0, 0);
     }
 
     /* Bottom button: Determines which function to execute depending on the current page */
@@ -266,7 +268,7 @@ const PollBody = () => {
             setDescriptions(updatedDescriptions);
             setNumForceUpdates(numForceUpdates + 1);
         }
-        
+
         /* Function triggered when option title blurs */
         const changeOption = (ind, option) => {
             options[ind - 1] = option;
@@ -279,8 +281,8 @@ const PollBody = () => {
             console.log(descriptions);
         }
 
-        let optionList = optionInds.map((ind) => 
-            <AnswerOption id={ind} changeOption={changeOption} changeDescription={changeDescription}/>)
+        let optionList = optionInds.map((ind) =>
+            <AnswerOption id={ind} changeOption={changeOption} changeDescription={changeDescription} />)
 
         return (
             <div className={getVisibility(2)}>
