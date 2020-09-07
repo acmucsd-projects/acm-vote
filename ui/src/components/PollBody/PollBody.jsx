@@ -18,7 +18,8 @@ const PollBody = () => {
     const [voters, setVoters] = useState([]);
     const [optionInds, setOptionInds] = useState([1, 2]);
     const [numForceUpdates, setNumForceUpdates] = useState(0); // BAD PRACTICE ;-;
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState(["", ""]);
+    const [descriptions, setDescriptions] = useState(["", ""]);
 
 
     /* Note to readers: I kind of can't put the pages of the form as their own components? 
@@ -105,9 +106,9 @@ const PollBody = () => {
 
         /* Changes the type of the "date" input to "text", if no date selected */
         const changeTypeToText = (e) => {
-            if (e.target.value) { 
+            if (e.target.value) {
                 setPollExpiration(e.target.value);
-                return; 
+                return;
             }
             e.target.type = "text";
         }
@@ -121,7 +122,7 @@ const PollBody = () => {
         }
 
         const updatePollType = (e) => {
-            if(e.target.value === 'multiple-choice') {setPollType('Multiple Choice');}
+            if (e.target.value === 'multiple-choice') { setPollType('Multiple Choice'); }
             setPollType('Ranked Choice');
         }
 
@@ -175,25 +176,25 @@ const PollBody = () => {
             setVoters(updatedVoters);
         }
 
-    /* Removes a voter */
-    const removeVoter = (voterId) => {
-        let updatedVoters = voters;
-        let ind = 0;
-        while (ind < updatedVoters.length) {
-            if (updatedVoters[ind].id === voterId) {
-                updatedVoters.splice(ind, 1);
-                break;
+        /* Removes a voter */
+        const removeVoter = (voterId) => {
+            let updatedVoters = voters;
+            let ind = 0;
+            while (ind < updatedVoters.length) {
+                if (updatedVoters[ind].id === voterId) {
+                    updatedVoters.splice(ind, 1);
+                    break;
+                }
+                ind++;
             }
-            ind++;
+            setVoters(updatedVoters);
+            setNumForceUpdates(numForceUpdates + 1);
         }
-        setVoters(updatedVoters);
-        setNumForceUpdates(numForceUpdates+1);
-    }
 
-    let numVoters = 0;
-    let voterList = voters.map((voter) => {
-        return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
-    })
+        let numVoters = 0;
+        let voterList = voters.map((voter) => {
+            return <Voter ind={++numVoters} name={voter.name} id={voter.id} removeVoter={removeVoter} />
+        })
 
 
         /* Autosuggest function that renders the suggestions */
@@ -257,10 +258,29 @@ const PollBody = () => {
             let updatedOptionInds = optionInds;
             updatedOptionInds.push(optionInds.length + 1);
             setOptionInds(updatedOptionInds);
-            console.log(optionInds);
+            let updatedOptions = options;
+            updatedOptions.push("");
+            setOptions(updatedOptions);
+            let updatedDescriptions = descriptions;
+            updatedDescriptions.push("");
+            setDescriptions(updatedDescriptions);
             setNumForceUpdates(numForceUpdates + 1);
         }
-    let optionList = optionInds.map((ind) => <AnswerOption id={ind} />)
+        
+        /* Function triggered when option title blurs */
+        const changeOption = (ind, option) => {
+            options[ind - 1] = option;
+            console.log(options);
+        }
+
+        /* Function triggered when option description blurs */
+        const changeDescription = (ind, description) => {
+            descriptions[ind - 1] = description;
+            console.log(descriptions);
+        }
+
+        let optionList = optionInds.map((ind) => 
+            <AnswerOption id={ind} changeOption={changeOption} changeDescription={changeDescription}/>)
 
         return (
             <div className={getVisibility(2)}>
