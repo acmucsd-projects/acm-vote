@@ -101,6 +101,16 @@
     cursor: pointer;
 }
 
+.options-list {
+    margin-left: 4vw;
+    text-align: left;
+}
+
+.options-list-item {
+    width: auto;
+    margin-bottom: 1vh;
+}
+
 .nav-buttons {
     margin-top: 5vh;
 }
