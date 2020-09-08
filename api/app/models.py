@@ -1,7 +1,7 @@
 from app import db
 from sqlalchemy.dialects.postgresql import JSON, ARRAY
 
-class election(db.Model):
+class Election(db.Model):
     __tablename__ = 'election'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String)
@@ -15,7 +15,7 @@ class election(db.Model):
     creator = db.Column(db.Integer)
     deadline = db.Column(db.DateTime)
 
-class question(db.Model):
+class Question(db.Model):
     __tablename__ = 'question'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -24,7 +24,7 @@ class question(db.Model):
     voteType = db.Column(db.String) # Proportional vs SPTP vs Ranked
 
 
-class user(db.Model):
+class User(db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key = True)
