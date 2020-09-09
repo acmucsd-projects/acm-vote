@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AutoSuggest from 'react-autosuggest';
 import Voter from '../Voter/Voter';
 import AnswerOption from '../AnswerOption/AnswerOption';
+import API from '../../API';
 import members from '../../data/voters.json';
 import './PollBody.css';
 
@@ -59,7 +60,14 @@ const PollBody = () => {
     }
 
     /* Top button function: Creating the Poll */
-    const createPoll = () => {
+    const createPoll = async() => {
+        const payload = {
+            pollTitle: pollTitle,
+            pollDescription: pollDescription,
+            options: options,
+            deadline: pollExpiration
+        }
+        await API.createPoll(payload);
         console.log("Yeet");
     }
 
