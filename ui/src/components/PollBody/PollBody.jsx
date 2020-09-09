@@ -18,9 +18,7 @@ const PollBody = () => {
     const [voters, setVoters] = useState([]);
     const [optionInds, setOptionInds] = useState([1, 2]);
     const [numForceUpdates, setNumForceUpdates] = useState(0); // BAD PRACTICE ;-;
-    const [options, setOptions] = useState(["", ""]);
-    const [descriptions, setDescriptions] = useState(["", ""]);
-
+    const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
 
     /* Note to readers: I kind of can't put the pages of the form as their own components? 
      * Because we need to be able to access all the input values on form submit right :0
@@ -261,24 +259,21 @@ const PollBody = () => {
             updatedOptionInds.push(optionInds.length + 1);
             setOptionInds(updatedOptionInds);
             let updatedOptions = options;
-            updatedOptions.push("");
+            updatedOptions.push({optionName:"", description:""});
             setOptions(updatedOptions);
-            let updatedDescriptions = descriptions;
-            updatedDescriptions.push("");
-            setDescriptions(updatedDescriptions);
             setNumForceUpdates(numForceUpdates + 1);
         }
 
         /* Function triggered when option title blurs */
         const changeOption = (ind, option) => {
-            options[ind - 1] = option;
+            options[ind - 1].optionName = option;
             console.log(options);
         }
 
         /* Function triggered when option description blurs */
         const changeDescription = (ind, description) => {
-            descriptions[ind - 1] = description;
-            console.log(descriptions);
+            options[ind - 1].description = description;
+            console.log(options);
         }
 
         let optionList = optionInds.map((ind) =>
@@ -296,7 +291,7 @@ const PollBody = () => {
 
     /*------------------------------------------CONFIRM DETAILS PAGE---------------------------------------- */
     const confirmDetails = () => {
-        const listBody = options.map((option) => <li className="options-list-item">{option}</li>);
+        const listBody = options.map((option) => <li className="options-list-item">{option.optionName}</li>);
         return (
             <div className={getVisibility(3)}>
                 <p><span className="create-poll-bold">Title:{'\u00A0'}</span>{pollTitle}</p>
