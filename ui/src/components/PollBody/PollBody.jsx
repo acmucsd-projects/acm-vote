@@ -16,7 +16,6 @@ const PollBody = () => {
     const [pollType, setPollType] = useState("");
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
-    const [numForceUpdates, setNumForceUpdates] = useState(0); // BAD PRACTICE ;-;
     const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
 
     /* Use an array to store page names to make the code more concise :0 */
@@ -106,12 +105,10 @@ const PollBody = () => {
                 setPollType={setPollType} setPollExpiration={setPollExpiration} 
                 privacy={privacy} setPrivacy={setPrivacy}/>
 
-                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} 
-                numForceUpdates={numForceUpdates} setNumForceUpdates={setNumForceUpdates} />
+                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} /> 
 
                 <SetAnswerOptions visibility={getVisibility(2)} options={options} setOptions={setOptions}
-                pollTitle={pollTitle} pollDescription={pollDescription}
-                numForceUpdates={numForceUpdates} setNumForceUpdates={setNumForceUpdates} />
+                pollTitle={pollTitle} pollDescription={pollDescription} />
                 
                 <ConfirmDetails visibility={getVisibility(3)} options={options}
                 pollTitle={pollTitle} pollDescription={pollDescription}

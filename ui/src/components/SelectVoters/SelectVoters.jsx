@@ -8,7 +8,7 @@ const SelectVoters = (props) => {
 const [value, setValue] = useState('');
 const [suggestions, setSuggestions] = useState([]);
 
-    const { visibility, voters, setVoters, numForceUpdates, setNumForceUpdates } = props;
+    const { visibility, voters, setVoters } = props;
     /* Autosuggest function to run to get suggestions */
     const getSuggestions = (value) => {
         const inputValue = value.toLowerCase();
@@ -23,24 +23,15 @@ const [suggestions, setSuggestions] = useState([]);
 
     /* Adds a selected suggestion to voters */
     const addVoter = (voter) => {
-        let updatedVoters = voters;
-        updatedVoters.push(voter);
-        setVoters(updatedVoters);
+        setVoters([
+            ...voters,
+            voter
+        ]);
     }
 
     /* Removes a voter */
     const removeVoter = (voterId) => {
-        let updatedVoters = voters;
-        let ind = 0;
-        while (ind < updatedVoters.length) {
-            if (updatedVoters[ind].id === voterId) {
-                updatedVoters.splice(ind, 1);
-                break;
-            }
-            ind++;
-        }
-        setVoters(updatedVoters);
-        setNumForceUpdates(numForceUpdates + 1);
+        setVoters(voters.filter(voter => voter.id !== voterId));
     }
 
     let numVoters = 0;

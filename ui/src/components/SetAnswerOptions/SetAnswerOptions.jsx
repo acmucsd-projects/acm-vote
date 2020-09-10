@@ -4,17 +4,18 @@ import '../PollBody/PollBody.css';
 
 const SetAnswerOptions = (props) => {
     const [optionInds, setOptionInds] = useState([1, 2]);
-    const {visibility, options, setOptions, pollTitle, pollDescription, 
-           numForceUpdates, setNumForceUpdates} = props;
+    const { visibility, options, setOptions, pollTitle, pollDescription } = props;
 
     const addOption = () => {
-        let updatedOptionInds = optionInds;
-        updatedOptionInds.push(optionInds.length + 1);
-        setOptionInds(updatedOptionInds);
-        let updatedOptions = options;
-        updatedOptions.push({ optionName: "", description: "" });
-        setOptions(updatedOptions);
-        setNumForceUpdates(numForceUpdates + 1);
+        setOptionInds (
+            [...optionInds,
+            optionInds.length + 1]
+        );
+        setOptions (
+            [...options,
+            {optionName:"", description:""}
+            ]
+        );
     }
 
     /* Function triggered when option title blurs */
