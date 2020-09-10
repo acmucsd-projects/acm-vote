@@ -1,3 +1,4 @@
+/* Poll Layout styles */
 .hidden {
     max-height: 0;
 }
@@ -6,6 +7,42 @@
     margin-bottom: 5vh;
 }
 
+.visible p {
+    margin-left: 9vw;
+    text-align: left;
+}
+
+.nav-buttons {
+    margin-top: 5vh;
+}
+
+.nav-button {
+    background-color: #c4c4c4;
+    color: black;
+    border-radius: 10px;
+}
+
+#top-button {
+    background-color: #1a75ff;
+    border-color: #1a75ff;
+    color: white;
+}
+
+#top-button:hover {
+    background-color: #3385ff;
+    border-color: #3385ff;
+}
+
+#bottom-button:hover {
+    background-color: #cccccc;
+    border-color: #cccccc;
+}
+
+.nav-button:hover {
+    cursor: pointer;
+}
+
+/* Classes that affect almost every input field */
 .create-poll-field {
     width: 80vw;
     height: 10vh;
@@ -21,17 +58,12 @@
     border-color: #80bfff;
 }
 
-.create-poll-bold {
-    font-weight: 600;
-}
-
 .create-poll-field-select {
     width: 82vw;
 }
 
-.visible p {
-    margin-left: 9vw;
-    text-align: left;
+.create-poll-bold {
+    font-weight: 600;
 }
 
 .radio-containers {
@@ -40,6 +72,8 @@
     height: 5vh;
     text-align: left;
 }
+
+/* Styles specific to autosuggest */
 
 .react-autosuggest__suggestions-list {
     margin: 0;
@@ -84,10 +118,13 @@
     background-color: #dddddd;
 }
 
+/* SelectVoter styles */
 .poll-voter-table {
     margin: 0 0 2vw 9vw;
 }
 
+
+/* SetAnswerOptions styles */
 #add-answer-button {
     margin: 5vh 0 0 40vw;
     background-color: #e5e5e5;
@@ -109,34 +146,4 @@
 .options-list-item {
     width: auto;
     margin-bottom: 1vh;
-}
-
-.nav-buttons {
-    margin-top: 5vh;
-}
-
-.nav-button {
-    background-color: #c4c4c4;
-    color: black;
-    border-radius: 10px;
-}
-
-#top-button {
-    background-color: #1a75ff;
-    border-color: #1a75ff;
-    color: white;
-}
-
-#top-button:hover {
-    background-color: #3385ff;
-    border-color: #3385ff;
-}
-
-#bottom-button:hover {
-    background-color: #cccccc;
-    border-color: #cccccc;
-}
-
-.nav-button:hover {
-    cursor: pointer;
 }
