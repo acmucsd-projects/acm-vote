@@ -4,8 +4,11 @@ import PageLayout from '../components/PageLayout/PageLayout';
 import './style.css';
 
 const CreatePoll = () => {
-    const pollBody = () => {return <PollBody/>;}
-    return <PageLayout children={pollBody()} />
+    return (
+        <PageLayout>
+            <PollBody />
+        </PageLayout>
+    );
 }
 
 export default CreatePoll;

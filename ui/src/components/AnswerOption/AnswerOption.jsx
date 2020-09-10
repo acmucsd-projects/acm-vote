@@ -2,14 +2,17 @@ import React from 'react';
 import './AnswerOption.css';
 
 const AnswerOption = (props) => {
-    let placeholderStr = `Option ${props.id}`;
+
+    const {id, changeOption, changeDescription} = props;
+
+    let placeholderStr = `Option ${id}`;
 
     const handleOptionChange = (e) => {
-        props.changeOption(props.id, e.target.value);
+        changeOption(id, e.target.value);
     }
 
     const handleDescriptionChange = (e) => {
-        props.changeDescription(props.id, e.target.value);
+        changeDescription(id, e.target.value);
     }
 
     return (
