@@ -1,16 +1,23 @@
 from app.models import db, User, Election, Question
 from app.config import TEST_SERVER, MEMBERSHIP_API, SEED_DATA
+import json
+import requests
 import datetime
 
+db.drop_all()
 db.create_all()
-
 
 if(SEED_DATA):
 
-    Question.delete()
+    User.query.delete()
     db.session.commit()
     
-    leaderboard_user = json.loads(request.get(MEMBERSHIP_API + "api/v1/leaderboard"))
+    r = requests.get(MEMBERSHIP_API + "api/v1/leaderboard")
+
+    print(r.status_code)
+    print(r.json())
+
+    leaderboard_user = json.loads(r.json())
 
     users = leaderboard_user['leaderboard']
     for u in users:
@@ -23,8 +30,8 @@ if(SEED_DATA):
     db.session.commit()
 
     if(TEST_SERVER):
-        Election.delete()
-        Question.delete()
+        Election.query.delete()
+        Question.query.delete()
         db.session.commit()
 
 
