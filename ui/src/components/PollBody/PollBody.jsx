@@ -115,7 +115,7 @@ const PollBody = () => {
                 
                 <ConfirmDetails visibility={getVisibility(3)} options={options}
                 pollTitle={pollTitle} pollDescription={pollDescription}
-                pollType={pollType} pollExpiration={pollExpiration} />
+                pollType={pollType} pollExpiration={pollExpiration} privacy={privacy}/>
             </form>
             <div className="nav-buttons">
                 <button className="create-poll-field nav-button" id="top-button" onClick={topButtonFunction}>
