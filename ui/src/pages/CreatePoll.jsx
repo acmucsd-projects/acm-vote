@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PollBody from '../components/PollBody/PollBody';
 import PageLayout from '../components/PageLayout/PageLayout';
 import './style.css';
