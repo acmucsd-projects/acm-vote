@@ -52,7 +52,8 @@ const [suggestions, setSuggestions] = useState([]);
     /* Autosuggest function that renders the suggestions */
     const renderSuggestion = (suggestion) => {
         return (
-            suggestions.some(e => e.name === suggestion.name) &&
+            suggestions.some(e => e.id === suggestion.id) && 
+            !voters.some(e => e.id == suggestion.id ) &&
             <div className="autosuggest-suggestion" onClick={() => addVoter(suggestion)}>
                 {suggestion.name} <span>({suggestion.email})</span>
             </div>

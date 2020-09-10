@@ -20,13 +20,11 @@ const SetAnswerOptions = (props) => {
     /* Function triggered when option title blurs */
     const changeOption = (ind, option) => {
         options[ind - 1].optionName = option;
-        console.log(options);
     }
 
     /* Function triggered when option description blurs */
     const changeDescription = (ind, description) => {
         options[ind - 1].description = description;
-        console.log(options);
     }
 
     let optionList = optionInds.map((ind) =>
