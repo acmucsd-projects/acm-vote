@@ -1,11 +1,11 @@
 import React from 'react';
-import PageLayout from './components/PageLayout/PageLayout';
+import CreatePoll from './pages/CreatePoll';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <PageLayout />
+      <CreatePoll />
     </div>
   );
 }

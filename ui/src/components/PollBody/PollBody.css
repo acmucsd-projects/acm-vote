@@ -1,0 +1,149 @@
+/* Poll Layout styles */
+.hidden {
+    max-height: 0;
+}
+
+.poll-body h1 {
+    margin-bottom: 5vh;
+}
+
+.visible p {
+    margin-left: 9vw;
+    text-align: left;
+}
+
+.nav-buttons {
+    margin-top: 5vh;
+}
+
+.nav-button {
+    background-color: #c4c4c4;
+    color: black;
+    border-radius: 10px;
+}
+
+#top-button {
+    background-color: #1a75ff;
+    border-color: #1a75ff;
+    color: white;
+}
+
+#top-button:hover {
+    background-color: #3385ff;
+    border-color: #3385ff;
+}
+
+#bottom-button:hover {
+    background-color: #cccccc;
+    border-color: #cccccc;
+}
+
+.nav-button:hover {
+    cursor: pointer;
+}
+
+/* Classes that affect almost every input field */
+.create-poll-field {
+    width: 80vw;
+    height: 10vh;
+    background-color: #f2f2f2;
+    border: 1px solid #BDBDBD;
+    padding: 0 1vw;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 2vh;
+}
+
+.create-poll-field:focus {
+    border-color: #80bfff;
+}
+
+.create-poll-field-select {
+    width: 82vw;
+}
+
+.create-poll-bold {
+    font-weight: 600;
+}
+
+.radio-containers {
+    margin-left: 9vw;
+    width: 80vw;
+    height: 5vh;
+    text-align: left;
+}
+
+/* Styles specific to autosuggest */
+
+.react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.react-autosuggest__input {
+    width: 80vw;
+    height: 10vh;
+    background-color: #f2f2f2;
+    border: 1px solid #BDBDBD;
+    padding: 0 1vw;
+    border-radius: 5px;
+    outline: none;
+}
+
+.react-autosuggest__input--focused {
+    border-color: #80bfff;
+}
+
+.react-autosuggest__suggestions-container--open {
+    display: block;
+    width: 82vw;
+    margin-left: 9vw;
+    border: 1px solid #BDBDBD;
+}
+
+.autosuggest-suggestion {
+    padding: 2vh 0;
+}
+
+.autosuggest-suggestion span {
+    color: #999999;
+}
+
+.react-autosuggest__suggestion {
+    cursor: pointer;
+}
+
+.react-autosuggest__suggestion--highlighted {
+    background-color: #dddddd;
+}
+
+/* SelectVoter styles */
+.poll-voter-table {
+    margin: 0 0 2vw 9vw;
+}
+
+
+/* SetAnswerOptions styles */
+#add-answer-button {
+    margin: 5vh 0 0 40vw;
+    background-color: #e5e5e5;
+    width: 20vw;
+    padding: 2vh 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 4vh;
+}
+
+#add-answer-button:hover {
+    cursor: pointer;
+}
+
+.options-list {
+    margin-left: 4vw;
+    text-align: left;
+}
+
+.options-list-item {
+    width: auto;
+    margin-bottom: 1vh;
+}
