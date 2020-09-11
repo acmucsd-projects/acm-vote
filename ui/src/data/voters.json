@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "name": "Matei",
+        "email": "matei@acmucsd.org",
+        "isBoard": true
+    },
+    {
+        "id": 2,
+        "name": "Paul",
+        "email": "paul@acmucsd.org",
+        "isBoard": true
+    },
+    {
+        "id": 3,
+        "name": "Michele",
+        "email": "michele@acmucsd.org",
+        "isBoard": false
+    },
+    {
+        "id": 4,
+        "name": "Tyler",
+        "email": "tyler@acmucsd.org",
+        "isBoard": false
+    },
+    {
+        "id": 5,
+        "name": "Dhruv",
+        "email": "dhruv@acmucsd.org",
+        "isBoard": false
+    },
+    {
+        "id": 6,
+        "name": "Michael",
+        "email": "michael@acmucsd.org",
+        "isBoard": true
+    },
+    {
+        "id": 7,
+        "name": "Maggie",
+        "email": "maggie@acmucsd.org",
+        "isBoard": true
+    }
+]
