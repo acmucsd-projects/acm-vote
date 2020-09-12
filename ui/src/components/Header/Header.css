@@ -7,10 +7,18 @@
     left: 0px;
 }
 
+.acm-logo {
+    max-height: 20vh;
+    max-width: 20vh;
+    margin-top: 1vw;
+    margin-left: 5vw;
+    float: left;
+}
+
 .profile-pic {
-    max-height: 8vh;
-    max-width: 8vh;
+    max-height: 5vh;
+    max-width: 5vh;
+    margin-top: 2vw;
     margin-right: 5vw;
-    border-radius: 50%;
     float: right;
 }
