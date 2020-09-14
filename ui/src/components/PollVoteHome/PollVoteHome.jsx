@@ -2,15 +2,19 @@ import React, {useState, useEffect} from 'react';
 import './PollVoteHome.css';
 
 const PollVoteHome = (props) => {
-    const {pollTitle, pollId, pollDescription, deadline} = props;
+    const {pollTitle, pollId, pollDescription, deadline, setCurrPage} = props;
     const [deadlineDate, setDeadlineDate] = useState();
 
     useEffect(() => {
         setDeadlineDate(new Date(deadline));
     })
 
+    const startVote = () => {
+        setCurrPage(1);
+    }
+
     const voteButton = (
-        <button className="vote-buttons" id="vote-button">Vote</button>
+        <button className="vote-buttons" id="vote-button" onClick={startVote} >Vote</button>
     );
 
     const viewResultsActivated = (
@@ -28,12 +32,12 @@ const PollVoteHome = (props) => {
     }
 
     return (
-        <div className="page-body" id="vote-page-body">
+        <div className="page-body vote-page-body">
             <h1>{pollTitle}</h1>
             <p id="poll-id-vote">Poll ID: {pollId}</p>
             <p>Vote by: {deadline}</p>
             <p>{pollDescription}</p>
-            <div id="vote-buttons-container">
+            <div className="vote-buttons-container">
                 {voteButton}
                 {viewResultsButton()}
             </div>

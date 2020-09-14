@@ -4,13 +4,13 @@
     text-align: left;
 }
 
-#vote-page-body {
+.vote-page-body {
     font-size: 20px;
     font-weight: 500;
     line-height: 5vh;
 }
 
-#vote-page-body h1 {
+.vote-page-body h1 {
     margin-bottom: 2vh;
 }
 
@@ -44,6 +44,6 @@
     border: 1px solid #c4c4c4;
 }
 
-#vote-buttons-container {
+.vote-buttons-container {
     margin-top: 10vh;
 }
