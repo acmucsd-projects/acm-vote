@@ -53,12 +53,3 @@ if(SEED_DATA):
 
         db.session.add_all([e1,e2])
         db.session.commit()
-
-
-
-
-
-
-
-
-

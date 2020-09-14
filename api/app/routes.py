@@ -32,7 +32,7 @@ def getVoterInfo(uuid):
 '''
 @app.route('/api/election', methods=['POST'])
 def createNewElection():
-   return "Hello, World!"
+   return "Hello World!"
 
 @app.route('/api/election', methods=['GET'])
 def getAllElections():

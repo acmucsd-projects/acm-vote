@@ -1,0 +1,29 @@
+.poll-voter-row {
+    height: 6vh;
+}
+
+.poll-voter-id {
+    width: 8vw;
+    text-align: left;
+}
+
+.poll-voter-name {
+    width: 64vw;
+    text-align: center;
+}
+
+.poll-voter-button {
+    width: 8vw;
+    text-align: right;
+}
+
+.poll-voter-remove {
+    color: #999999;
+    font-weight: 500;
+    cursor: pointer;
+    float: right;
+}
+
+.poll-voter-remove:hover {
+    color: #ff9999;
+}
