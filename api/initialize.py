@@ -1,5 +1,5 @@
 from app.models import db, User, Election, Question
-from app.config import TEST_SERVER, MEMBERSHIP_API, SEED_DATA
+from app.config import TEST_SERVER, MEMBERSHIP_API, SEED_DATA, TOKEN
 import json
 import requests
 import datetime
@@ -11,21 +11,22 @@ if(SEED_DATA):
 
     User.query.delete()
     db.session.commit()
-    
-    r = requests.get(MEMBERSHIP_API + "api/v1/leaderboard")
+    print(TOKEN)
+    r = requests.get(MEMBERSHIP_API + 'api/v1/leaderboard', headers = TOKEN)
 
     print(r.status_code)
     print(r.json())
 
-    leaderboard_user = json.loads(r.json())
+    leaderboard_user = r.json()
 
     users = leaderboard_user['leaderboard']
-    for u in users:
-        uName = u['firstName'] + u['lastName']
-        
-        board = True if u['accessType'] == 'STAFF' else False
 
-        newUser = user(userName=uName, uuid=u['uuid'], canVote=[], boardMember=board)
+    for u in users:
+        uName = u['firstName'] + " " + u['lastName']
+        
+        board = False #True if u['accessType'] == 'STAFF' else
+
+        newUser = User(userName=uName, uuid="null", canVote=[], boardMember=board)
         db.session.add(newUser)
     db.session.commit()
 
@@ -47,8 +48,8 @@ if(SEED_DATA):
         q2ID = Question.query.filter_by(question="q2").first().id
         q3ID = Question.query.filter_by(question="q2").first().id
         
-        e1 = Election(name='e1', description='test1', questions=[q1ID, q2ID], hasVoted=[], active=False, creator="", deadline=datetime.datetime(2025, 5, 17))
-        e2 = Election(name='e1', description='test1', questions=[q3ID], hasVoted=[], active=False, creator="", deadline=datetime.datetime(2025, 5, 17))
+        e1 = Election(name='e1', description='test1', questions=[q1ID, q2ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
+        e2 = Election(name='e1', description='test1', questions=[q3ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
 
         db.session.add_all([e1,e2])
         db.session.commit()

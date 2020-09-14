@@ -30,7 +30,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     userName = db.Column(db.String)
 
-    uuid = db.Column(db.Integer)
+    uuid = db.Column(db.String)
 
     canVote = db.Column(ARRAY(db.Integer)) # id numbers of whitelisted elections
 
