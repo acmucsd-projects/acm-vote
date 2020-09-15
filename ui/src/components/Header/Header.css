@@ -5,6 +5,11 @@
     padding-top: 1vh;
     top: 0px;
     left: 0px;
+    padding-bottom: 10px;
+    border-bottom: 10px solid;
+    border-image-slice: 1;
+    border-width: 6px;
+    border-image-source: linear-gradient(to right, #816DFF, #62B0FF, #FFD51E, #E981A0);
 }
 
 .acm-logo {
