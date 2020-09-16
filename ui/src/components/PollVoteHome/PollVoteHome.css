@@ -29,9 +29,18 @@
     cursor: pointer;
 }
 
-#vote-button {
+.vote-buttons:focus {
+    outline: 0;
+}
+
+#vote-button-activated {
     background-color: #816dff;
     border: 1px solid #816dff;
+}
+
+#vote-button-disabled {
+    background-color: #c4c4c4;
+    border: 1px solid #c4c4c4;
 }
 
 #view-results-button-activated {

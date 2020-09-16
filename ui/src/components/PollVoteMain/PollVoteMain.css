@@ -13,14 +13,15 @@
     font-weight: normal;
 }
 
-.vote-option-box p {
-    width: auto;
+.vote-option-box label {
+    width: 40vw;
     display: inline-block;
 }
 
 .vote-option-box input {
+    width: min-content;
     display: inline-block;
-    margin-top: 7px;
+    margin: 7px 0;
 }
 
 #poll-vote-main-footer {

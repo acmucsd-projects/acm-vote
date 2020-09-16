@@ -4,7 +4,18 @@ import './PollVoteMain.css';
 
 const PollVoteMain = (props) => {
     const [selection, setSelection] = useState(-1);
-    const { pollTitle, pollDescription, pollOptions } = props;
+    const { pollTitle, pollDescription, pollOptions, deadline, setCurrPage } = props;
+
+    /* Check the deadline again, and check whether the user selected an option */
+    const submitVote = () => {
+        const currDate = new Date();
+        const deadlineDate = new Date(deadline);
+        if(currDate > deadlineDate) {
+            alert("The deadline to vote has passed. Click ok to be redirected to the vote page.");
+            setCurrPage(0);
+        }
+        else if(selection == -1) {alert("Please select an option");}
+    }
 
     let optionInd = 0;
     const optionsSection = pollOptions? pollOptions.map((option) => {
@@ -25,7 +36,7 @@ const PollVoteMain = (props) => {
             {optionsSection}
             <p id="poll-vote-main-footer">Please check your vote carefully before submitting</p>
             <div className="vote-buttons-container">
-            <button className="vote-buttons" id="vote-submit-button">Vote</button>
+            <button className="vote-buttons" id="vote-submit-button" onClick={submitVote}>Vote</button>
             </div>
         </div>
     )
