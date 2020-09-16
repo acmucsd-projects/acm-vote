@@ -15,6 +15,10 @@ const PollVoteMain = (props) => {
             setCurrPage(0);
         }
         else if(selection == -1) {alert("Please select an option");}
+        else {
+            document.getElementById('vote-main-body').style.filter = 'blur(10px)';
+            console.log("Please blur");
+        }
     }
 
     let optionInd = 0;
@@ -30,7 +34,7 @@ const PollVoteMain = (props) => {
     }) : <div></div>
 
     return (
-        <div className="page-body vote-page-body">
+        <div className="page-body vote-page-body" id="vote-main-body">
             <h1>{pollTitle}</h1>
             <p id="poll-vote-main-description">{pollDescription}</p>
             {optionsSection}
