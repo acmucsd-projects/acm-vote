@@ -14,8 +14,6 @@ if(SEED_DATA):
     print(TOKEN)
     r = requests.get(MEMBERSHIP_API + 'api/v1/leaderboard', headers = TOKEN)
 
-    print(r.status_code)
-    print(r.json())
 
     leaderboard_user = r.json()
 
