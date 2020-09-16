@@ -15,6 +15,7 @@ class Election(db.Model):
     creator = db.Column(db.Integer)
     deadline = db.Column(db.DateTime)
 
+
 class Question(db.Model):
     __tablename__ = 'question'
 

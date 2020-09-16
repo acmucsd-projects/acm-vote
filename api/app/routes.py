@@ -42,6 +42,7 @@ def createNewElection():
       quest = q
 
     elect = Election(name=request.form['name'], description=request.form['description'], )
+    # !!WIP!!
 
 @app.route('/api/election', methods=['GET'])
 def getElections():
