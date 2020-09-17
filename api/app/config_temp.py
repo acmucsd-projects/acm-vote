@@ -6,19 +6,13 @@ TEST_SERVER = True  # If database is being seeded, decides whether to create
 
 MEMBERSHIP_API = '' # Host Port for the membership portal 
 
-headers = {
-  'Content-Type': 'application/json'
-}
-payload = {
-    'email':'', # Membership Portal account email
-    'password': '' # Membership Portal account password
-}
-
-# Membership Portal Login
-token_response = requests.post(MEMBERSHIP_API + 'api/v1/auth/login', data = json.dumps(payload), headers=headers)
-token_json =  token_response.json()
-
-TOKEN = { # Token to access Membership Portal requests
-    'Content-Type': 'application/json',
-    "Authorization": "Bearer " + token_json['token']
-}
+# JWT used for admin account on Membership Portal API to seed user data on database
+#
+# This needs to be acquired manually, and can be done so at the route:
+# POST {MEMBERSHIP_API}/api/v1/auth/login
+# Content-Type: application/json
+#
+# You'll need to supply a JSON in the body with "email" and "password" properties
+# with the user credentials. The returning JSON's "token" property will contain
+# the necessary information.
+TOKEN =
