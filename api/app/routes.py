@@ -12,7 +12,7 @@ def getVoterlogin():
 
 @app.route('/api/user/<string:uuid>', methods=['GET'])
 def getVoterInfo(uuid):
-    r = request.get(MEMBERSHIP_API + "api/v1/user/", headers=TOKEN)
+    r = requests.get(MEMBERSHIP_API + "api/v1/user/", headers = {"Authorization": f"Bearer {TOKEN}"})
     return json.dump(r.json())
 
 '''
