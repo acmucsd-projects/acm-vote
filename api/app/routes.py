@@ -7,7 +7,7 @@ import requests
 @app.route('/api/user/login', methods=['POST'])
 def getVoterlogin():
 
-    r = request.get(MEMBERSHIP_API + "", headers=TOKEN)
+    r = requests.get(MEMBERSHIP_API + "", headers = {"Authorization": f"Bearer {TOKEN}"})
     return json.dump(r.json())
 
 @app.route('/api/user/<string:uuid>', methods=['GET'])
