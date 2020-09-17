@@ -22,7 +22,7 @@ if(SEED_DATA):
     for u in users:
         uName = u['firstName'] + " " + u['lastName']
         
-        board = False #True if u['accessType'] == 'STAFF' else
+        board = False
 
         newUser = User(userName=uName, uuid="null", canVote=[], boardMember=board)
         db.session.add(newUser)
