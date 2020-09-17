@@ -44,7 +44,7 @@ if(SEED_DATA):
 
         q1ID = Question.query.filter_by(question="q1").first().id
         q2ID = Question.query.filter_by(question="q2").first().id
-        q3ID = Question.query.filter_by(question="q2").first().id
+        q3ID = Question.query.filter_by(question="q3").first().id
         
         e1 = Election(name='e1', description='test1', questions=[q1ID, q2ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
         e2 = Election(name='e1', description='test1', questions=[q3ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
