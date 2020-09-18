@@ -13,7 +13,6 @@ const BasicInformation = (props) => {
     const changeTypeToText = (e) => {
         if (e.target.value) {
             setPollExpiration(e.target.value);
-        console.log(e.target.value.toString());
             return;
         }
         e.target.type = "text";
