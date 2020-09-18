@@ -1,5 +1,3 @@
-
-
 from .config import DATABASE_URL
 
 from flask import Flask
