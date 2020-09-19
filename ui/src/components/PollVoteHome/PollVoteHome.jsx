@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {notification} from 'antd';
+import 'antd/dist/antd.css';
 import './PollVoteHome.css';
 
 const PollVoteHome = (props) => {
@@ -7,10 +9,11 @@ const PollVoteHome = (props) => {
 
     useEffect(() => {
         setDeadlineDate(new Date(deadline));
-    })
+    },[deadline])
 
     /* The vote button and its functionalities depending on whether the current poll has expired */
     const startVote = () => {
+        notification.close("results-not-available");
         setCurrPage(1);
     }
 
@@ -19,7 +22,11 @@ const PollVoteHome = (props) => {
     );
 
     const notifyPollExpired = () => {
-        alert("The deadline to vote has passed. Click the View Results button to view results!");
+        notification.open({
+            key: "poll-expired",
+            message: "Unable to Vote",
+            description: "The deadline to vote has passed. Click the View Results button to view results!"
+        });
     }
 
     const voteButtonDisabled = (
@@ -39,7 +46,11 @@ const PollVoteHome = (props) => {
     )
 
     const notifyResultsUnavailable = () => {
-        alert("Results for this poll are not yet available. Click the vote button to vote!");
+        notification.open({
+            key: "results-not-available",
+            message: "Unable to View Results",
+            description: "Results for this poll are not yet available. Click the vote button to vote!"
+        });
     }
 
     const viewResultsDisabled = (

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import VoteCompletePopup from '../VoteCompletePopup/VoteCompletePopup';
 import '../PollVoteHome/PollVoteHome.css';
 import './PollVoteMain.css';
+import { notification } from 'antd';
 
 const PollVoteMain = (props) => {
     const [selection, setSelection] = useState(-1);
@@ -13,8 +14,15 @@ const PollVoteMain = (props) => {
         const currDate = new Date();
         const deadlineDate = new Date(deadline);
         if (currDate > deadlineDate) {
-            alert("The deadline to vote has passed. Click ok to be redirected to the vote page.");
-            setCurrPage(0);
+        notification.open({
+            key: "poll-expired-on-submit",
+            message: "Unable to Vote",
+            description: "The deadline to vote has passed. Click this notification to go back to home page!",
+            onClick: () => {
+                notification.close("poll-expired-on-submit");
+                setCurrPage(0);
+            }
+        });
         }
         else if (selection == -1) { alert("Please select an option"); }
         else {
