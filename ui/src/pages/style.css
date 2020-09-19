@@ -6,7 +6,33 @@
     display: block;
     /* Design peeps: I just did what matched with what Dhruv already has.
      * Feel free to change the width and stuff per your wishes */
-    width: 40vw;
+    width: 20%;
     padding: 2vh 0;
-    margin: 1vh 30vw;
+    margin: 1vh 40%;
+    border-radius: 50px;
+    color: white;
+    border-style: none;
+}
+
+.login-button:hover {
+    filter: brightness(70%);
+}
+
+.sign-in-button {
+    background-color: #816DFF;
+}
+
+.create-account-button {
+    background-color: #E981A0;
+}
+
+.login-logo {
+    width: 40vw;
+}
+
+@media only screen and (max-width: 768px) {
+    .login-button {
+        width: 40%;
+        margin: 1vh 30%;
+    }
 }
