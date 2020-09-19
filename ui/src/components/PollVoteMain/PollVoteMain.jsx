@@ -31,14 +31,12 @@ const PollVoteMain = (props) => {
         }
     }
 
-    let optionInd = 0;
-    const optionsSection = pollOptions ? pollOptions.map((option) => {
+    const optionsSection = pollOptions ? pollOptions.map((option, optionInd) => {
         const optionId = "option" + optionInd;
-        optionInd++;
         return (
             <div className="vote-option-box">
                 <label for={optionId}>{option.optionName}</label>
-                <input type="radio" name="pollOption" id={optionId} onClick={() => setSelection(optionInd - 1)} />
+                <input type="radio" name="pollOption" id={optionId} onClick={() => setSelection(optionInd)} />
             </div>
         );
     }) : <div></div>
