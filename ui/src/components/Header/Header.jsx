@@ -1,14 +1,14 @@
 import React from 'react';
 import './Header.css';
-import sampleProfilePic from '../../img/hamburger-menu.png';
-import sampleProfilePic2 from '../../img/acm-logo-final.png';
+import hamburger from '../../img/hamburger-menu.png';
+import acmVoteLogo from '../../img/acm-logo-final.png';
 
 /* Profile photo link  be passed in from the Page component */
 const Header = (props) => {
     return(
         <div className="header">
-            <img className="acm-logo" src={sampleProfilePic2} alt="Profile Pic"/>
-            <img className="profile-pic" src={sampleProfilePic} alt="Profile Pic"/>
+            <img className="acm-logo" src={acmVoteLogo} alt="Acm Logo"/>
+            <img className="hamburger" src={hamburger} alt="Profile Pic"/>
         </div>
     );
 }
