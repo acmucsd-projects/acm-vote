@@ -31,11 +31,14 @@ const BasicInformation = (props) => {
         setPollType('Ranked Choice');
     }
 
+    const privatePublic = {
+        marginLeft: '18.5vw'
+    }
     // The first page defining basic meeting information
     return (
         <div className={visibility}>
-            <input className="create-poll-field" onBlur={updatePollTitle} name="name" placeholder="Name" />
-            <input className="create-poll-field" onBlur={updatePollDescription} name="description" placeholder="Description" />
+            <input className="create-poll-field" onBlur={updatePollTitle} name="name" placeholder="Poll Title" />
+            <input className="create-poll-field" onBlur={updatePollDescription} name="description" placeholder="Description of Poll" />
             <select className="create-poll-field create-poll-field-select" onBlur={updatePollType} name="type">
                 <option value="" disabled selected>Poll Type</option>
                 <option value="multiple-choice">Multiple Choice</option>
@@ -43,8 +46,8 @@ const BasicInformation = (props) => {
             </select>
             <input className="create-poll-field" name="date" type="text"
                 onFocus={changeTypeToDate} onBlur={changeTypeToText}
-                placeholder="What is the last day to vote?" />
-            <p>Do you want to create a Private or Public poll?</p>
+                placeholder="Select the last day to vote" />
+            <p style={privatePublic}>Do you want to create a Private or Public poll?</p>
             <div className="radio-containers">
                 <input type="radio" name="privacy" id="public" value="public"
                     checked={privacy === 'public'} onClick={() => setPrivacy('public')} />
