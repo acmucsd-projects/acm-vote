@@ -9,7 +9,7 @@ class Election(db.Model):
 
     questions = db.Column(ARRAY(db.Integer))
 
-    hasVoted = db.Column(JSON) # ids of users who have voted in this election w/ timestamp
+    hasVoted = db.Column(ARRAY(db.Integer)) # ids of users who have voted in this election w/ timestamp
 
     active = db.Column(db.Boolean)
     creator = db.Column(db.Integer)

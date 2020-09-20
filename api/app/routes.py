@@ -38,11 +38,17 @@ def getVoterInfo(uuid):
 @app.route('/api/election', methods=['POST'])
 def createNewElection():
     data = request.form.toJson()
-    for q in data['questions']:
-      quest = q
+    questions = []
+    for q, d in data['questions'].items():
+        answers = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
 
-    elect = Election(name=request.form['name'], description=request.form['description'], )
-    # !!WIP!!
+        quest = Question(question=q, votes=answers, voteType=d['type'])
+
+        db.session.add(quest)
+        db.session.commit()
+        result.append(quest.id)
+
+    elect = Election(name=data['name'], description=data['description'], questions=questions, hasVoted={},)
 
 @app.route('/api/election', methods=['GET'])
 def getElections():
