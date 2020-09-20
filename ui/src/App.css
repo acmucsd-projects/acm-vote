@@ -39,10 +39,7 @@
 
 input {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
   padding: 10px;
   width: 35%;
   font-size: medium;
@@ -81,3 +78,4 @@ input[type=button]:hover {
 #forgot-password:hover {
   color: #C4C4C4;
 }
+

@@ -8,6 +8,11 @@ verify_ssl = true
 [packages]
 flask = "*"
 python-dotenv = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
+postgres = "*"
+psycopg2 = "*"
+requests = "*"
 
 [scripts]
 server = "flask run"
