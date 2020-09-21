@@ -1,4 +1,4 @@
-from . import app
+from . import app, db
 from . import models
 from config import TOKEN, MEMBERSHIP_API
 import json
@@ -35,7 +35,7 @@ def getVoterInfo(uuid):
 #}
 @app.route('/api/election', methods=['POST'])
 def createNewElection():
-    data = request.form.toJson()
+    data = request.json
     questions = []
     for q, d in data['questions'].items():
         answers = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
@@ -85,6 +85,10 @@ def deleteElection(uuid):
         return "ERROR - Cannot delete active election"
     
     else:
+        for i in election['questions']:
+            quest = Question.query.filter_by(id=i).first()
+            db.session.delete(quest)
+        
         db.session.delete(election) #delete questions?
         db.session.commit()
 
@@ -117,7 +121,7 @@ def deleteElection(uuid):
 #}
 @app.route('/api/election/<int:uuid>', methods=['PATCH'])
 def editElection(uuid):
-    data = json.loads(request.json)
+    data = request.json
     election = Elections.query.filter_by(id=uuid)
 
     if(election['active'] == true):
@@ -136,14 +140,32 @@ def editElection(uuid):
 
             election.date = date
 
-        for q, d in data['questions'].items():
+        for d in data['questions']:
             if(d['type'] == 'A'):
-
+                answers = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
                 quest = Question(question=q, votes=answers, voteType=d['type'])
 
                 db.session.add(quest)
-                db.session.commit()
-                result.append(quest.id)
+
+                election['questions'].append(quest.id)
+
+            else if(d['type'] == 'E'):
+                quest = Question.query.filter_by(id=d['id']).first()
+                if(d['question'] != None):
+                    quest['question'] = d['question']
+                
+                if(d['answers'] != None):
+                    quest['answers'] = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
+
+                if(d['type'] != None):
+                    quest['type'] = d['type']
+
+            else if(d['type'] == 'R'):
+                election['questions'].remove(d['id'])
+                quest = Question.query.filter_by(id=d['id']).first()
+                db.session.delete(quest)
+    
+    db.session.commit()
 
 @app.route('/api/election/<int:uuid>/activate', methods=['PUT'])
 def activateElection(uuid):
