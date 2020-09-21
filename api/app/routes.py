@@ -1,5 +1,5 @@
 from . import app, db
-from . import models
+from models import Question,Election, User
 from config import TOKEN, MEMBERSHIP_API
 import json
 import requests
@@ -177,11 +177,22 @@ def activateElection(uuid):
         elect['active'] = True
         db.session.commit()
 
-
-
+#{
+#   user:  (id#),
+#   questions:{
+#       id:answerChoice,
+#       id:answerChoice
+#   }
+#}
 @app.route('/api/election/<int:uuid>/vote', methods=['POST'])
 def voteElection(uuid):
-    return "Hello, World!"
+    data = request.json
+    elect = Election.query.filter_by(id=uuid)
+    elect['hasVoted'].append(data['user'])
+    for i, a in data['questions'].items:
+        quest = Question.query.filter_by(id=i).first()
+        quest.answer
+
 
 @app.route('/api/election/<int:uuid>/results', methods=['GET'])
 def getElectionResults(uuid):
