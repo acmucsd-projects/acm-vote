@@ -1,0 +1,18 @@
+{
+    "id": 10086, 
+    "name": "Cereal or Milk First",
+    "description": "Why would you put cereal first lol",
+    "questions": [
+        {
+            "optionName": "Cereal first",
+            "description": "But whyyyyyy :("
+        },
+        {
+            "optionName": "Milk first",
+            "description": "Welcome to the correct gang >:D"
+        }
+    ],
+    "active": true,
+    "creator": 1234567,
+    "deadline": "2020-09-30"
+}

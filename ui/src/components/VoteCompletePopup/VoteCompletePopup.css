@@ -1,0 +1,25 @@
+.vote-complete-popup-container {
+    position: fixed;
+    width: 70vw;
+    top: 15vh;
+    left: 15vw;
+    z-index: 100;
+    background: white;
+    text-align: center;
+}
+
+.vote-complete-popup-content {
+    padding: 30vh 0;
+}
+
+#vote-complete-return-home-button {
+    margin-top: 5vh;
+    width: 56vw;
+    height: 10vh;
+    border-radius: 5vh;
+    font-size: 20px;
+    color: white;
+    background-color: #e981a0;
+    border: 1px solid #e981a0;
+    cursor: pointer;
+}

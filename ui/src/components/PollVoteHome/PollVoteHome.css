@@ -1,0 +1,58 @@
+.page-body {
+    width: 82vw;
+    margin-left: 9vw;
+    text-align: left;
+}
+
+.vote-page-body {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 5vh;
+}
+
+.vote-page-body h1 {
+    margin-bottom: 2vh;
+}
+
+#poll-id-vote {
+    font-size: 25px;
+    margin-bottom: 5vh;
+}
+
+.vote-buttons {
+    margin-bottom: 2vh;
+    width: 80vw;
+    height: 10vh;
+    border-radius: 5vh;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+.vote-buttons:focus {
+    outline: 0;
+}
+
+#vote-button-activated {
+    background-color: #816dff;
+    border: 1px solid #816dff;
+}
+
+#vote-button-disabled {
+    background-color: #c4c4c4;
+    border: 1px solid #c4c4c4;
+}
+
+#view-results-button-activated {
+    background-color: #e981a0;
+    border: 1px solid #e981a0;
+}
+
+#view-results-button-disabled {
+    background-color: #c4c4c4;
+    border: 1px solid #c4c4c4;
+}
+
+.vote-buttons-container {
+    margin-top: 10vh;
+}
