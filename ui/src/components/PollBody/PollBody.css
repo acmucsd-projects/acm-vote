@@ -78,6 +78,7 @@
 
 .create-poll-field-select {
     width: 62.5%;
+    margin-top: 2vh;
 }
 
 .create-poll-bold {
@@ -113,17 +114,17 @@ input[type=checkbox] {
 
 .react-autosuggest__suggestions-list {
     width: 60%;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
     padding: 0;
+    margin-left: 2vw;
+    margin-right: 18.5vw;
+    justify-content: left;
+    text-align: left;
     list-style-type: none;
 }
 
 .react-autosuggest__input {
     width: 60%;
     height: 8vh;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
     background-color: #f2f2f2;
     border: 1px solid #BDBDBD;
     padding: 0 1vw;
@@ -133,45 +134,35 @@ input[type=checkbox] {
 
 .react-autosuggest__input--focused {
     width: 60%;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
     border-color: #80bfff;
 }
 
 .react-autosuggest__suggestions-container--open {
     width: 60%;
     display: block;
+    width: 60vw;
     margin-left: 18.5vw;
     margin-right: 18.5vw;
-    width: 82vw;
-    margin-left: 9vw;
     border: 1px solid #BDBDBD;
 }
 
 .autosuggest-suggestion {
     padding: 2vh 0;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
 }
 
 .autosuggest-suggestion span {
     color: #999999;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
+
 }
 
 .react-autosuggest__suggestion {
-    width: 60%;
     cursor: pointer;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
+    justify-content: left;
 }
 
 .react-autosuggest__suggestion--highlighted {
-    width: 60%;
     background-color: #dddddd;
-    margin-left: 18.5vw;
-    margin-right: 18.5vw;
+    width: 155%;
 }
 
 /* SelectVoter styles */
