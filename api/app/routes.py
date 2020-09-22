@@ -66,7 +66,7 @@ def getElections():
 
 @app.route('/api/election/<int:uuid>', methods=['GET'])
 def getElection(uuid):
-    elect = Elections.query.filter_by(id=uuid)
+    elect = Election.query.filter_by(id=uuid)
     que = []
     for i in range(0, len(elect['questions'])):
         q = Question.query.filter_by(id=elect['question'][i])
@@ -80,7 +80,7 @@ def getElection(uuid):
 
 @app.route('/api/election/<int:uuid>', methods=['DELETE'])
 def deleteElection(uuid):
-    election = Elections.query.filter_by(id=uuid).first()
+    election = Election.query.filter_by(id=uuid).first()
     if(election['active'] == true):
         return "ERROR - Cannot delete active election"
     
@@ -122,7 +122,7 @@ def deleteElection(uuid):
 @app.route('/api/election/<int:uuid>', methods=['PATCH'])
 def editElection(uuid):
     data = request.json
-    election = Elections.query.filter_by(id=uuid)
+    election = Election.query.filter_by(id=uuid)
 
     if(election['active'] == true):
         return "ERROR - Cannot edit active election"
@@ -169,7 +169,7 @@ def editElection(uuid):
 
 @app.route('/api/election/<int:uuid>/activate', methods=['PUT'])
 def activateElection(uuid):
-    election = Elections.query.filter_by(id=uuid).first()
+    election = Election.query.filter_by(id=uuid).first()
     if(election['active'] == true):
         return "ERROR - Already active election"
     
@@ -187,12 +187,21 @@ def activateElection(uuid):
 @app.route('/api/election/<int:uuid>/vote', methods=['POST'])
 def voteElection(uuid):
     data = request.json
+    qID = data['questions'].values()
     elect = Election.query.filter_by(id=uuid)
+    eQID = elect['questions']
+
+    if qID.sort() != eQID.sort():
+        return "ERROR - Question IDs do not match those stored for this election"
+
+
     elect['hasVoted'].append(data['user'])
     for i, a in data['questions'].items:
         quest = Question.query.filter_by(id=i).first()
-        quest.answer
-
+        answers = json.loads(quest.votes)
+        answers[a] += 1
+        quest.votes = json.dumps(answers)
+    db.session.commit()
 
 @app.route('/api/election/<int:uuid>/results', methods=['GET'])
 def getElectionResults(uuid):
