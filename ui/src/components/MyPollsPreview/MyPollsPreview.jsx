@@ -4,7 +4,7 @@ import './MyPollsPreview.css';
 
 const MyPollsPreview = (props) => {
     
-    // TODO change when middleware is added
+    // TODO add check for "active" in particular poll's properties
     const isFinished = props.pollId != -1;
 
     if (isFinished) {
