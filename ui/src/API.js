@@ -16,7 +16,7 @@ export default {
             id: 10086,
             name: payload.pollTitle,
             description: payload.pollDescription,
-            questions: payload.options, // I assume this is options?
+            questions: options, // I assume this is options?
             active: true,
             creator: 1234567, // Probably need login to be finished for this?
             deadline: payload.deadline
@@ -24,5 +24,9 @@ export default {
         }
 
         return axios(config);
+    },
+
+    getPoll: function(uuid) {
+       return axios.get(`${serverURL}/api/election/${uuid}`); 
     }
 }

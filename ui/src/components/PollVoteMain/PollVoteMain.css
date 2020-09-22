@@ -1,0 +1,34 @@
+#poll-vote-main-description {
+    margin: 5vh 0;
+}
+
+.vote-submit-button {
+    background-color: #816dff;
+    border: 1px solid #816dff;
+}
+
+.vote-option-box {
+    display: flex;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.vote-option-box label {
+    width: 40vw;
+    display: inline-block;
+}
+
+.vote-option-box input {
+    width: min-content;
+    display: inline-block;
+    margin: 7px 0;
+}
+
+#poll-vote-main-footer {
+    font-weight: normal;
+}
+
+#vote-submit-button {
+    background-color: #816dff;
+    border: 1px solid #816dff;
+}
