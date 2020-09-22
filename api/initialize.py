@@ -7,7 +7,7 @@ import datetime
 db.drop_all()
 db.create_all()
 
-if(SEED_DATA):
+if SEED_DATA :
 
     User.query.delete()
     db.session.commit()
@@ -16,7 +16,7 @@ if(SEED_DATA):
 
 
     leaderboard_user = r.json()
-
+    print(leaderboard_user)
     users = leaderboard_user['leaderboard']
 
     for u in users:
@@ -28,7 +28,7 @@ if(SEED_DATA):
         db.session.add(newUser)
     db.session.commit()
 
-    if(TEST_SERVER):
+    if TEST_SERVER:
         Election.query.delete()
         Question.query.delete()
         db.session.commit()

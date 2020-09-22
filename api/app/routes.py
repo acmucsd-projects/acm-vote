@@ -1,6 +1,6 @@
 from . import app, db
-from models import Question,Election, User
-from config import TOKEN, MEMBERSHIP_API
+from .models import Question,Election, User
+from .config import TOKEN, MEMBERSHIP_API
 import json
 import requests
 import datetime
@@ -8,6 +8,7 @@ import datetime
 @app.route('/api/user/login', methods=['POST'])
 def getVoterlogin():
     r = requests.get(MEMBERSHIP_API + "", headers = {"Authorization": f"Bearer {TOKEN}"})
+
     return json.dump(r.json())
 
 @app.route('/api/user/<string:uuid>', methods=['GET'])
@@ -81,7 +82,7 @@ def getElection(uuid):
 @app.route('/api/election/<int:uuid>', methods=['DELETE'])
 def deleteElection(uuid):
     election = Election.query.filter_by(id=uuid).first()
-    if(election['active'] == true):
+    if election['active'] == True:
         return "ERROR - Cannot delete active election"
     
     else:
@@ -124,24 +125,24 @@ def editElection(uuid):
     data = request.json
     election = Election.query.filter_by(id=uuid)
 
-    if(election['active'] == true):
+    if election['active'] == True:
         return "ERROR - Cannot edit active election"
 
     else:
-        if(data['name'] != None):
+        if data['name'] != None:
             election.name = data['name']
         
-        if(data['description'] != None):
+        if data['description'] != None:
             election.name = data['description']
 
-        if(data['deadline'] != None):
+        if data['deadline'] != None :
             dInfo =data['deadline']
             date = datetime.datetime(dInfo[0],dInfo[1],dInfo[2],minute=dInfo[3],hour=dInfo[4])
 
             election.date = date
 
         for d in data['questions']:
-            if(d['type'] == 'A'):
+            if d['type'] == 'A':
                 answers = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
                 quest = Question(question=q, votes=answers, voteType=d['type'])
 
@@ -149,18 +150,18 @@ def editElection(uuid):
 
                 election['questions'].append(quest.id)
 
-            else if(d['type'] == 'E'):
+            elif d['type'] == 'E':
                 quest = Question.query.filter_by(id=d['id']).first()
-                if(d['question'] != None):
+                if d['question'] != None:
                     quest['question'] = d['question']
                 
-                if(d['answers'] != None):
+                if d['answers'] != None:
                     quest['answers'] = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
 
-                if(d['type'] != None):
+                if d['type'] != None:
                     quest['type'] = d['type']
 
-            else if(d['type'] == 'R'):
+            elif d['type'] == 'R':
                 election['questions'].remove(d['id'])
                 quest = Question.query.filter_by(id=d['id']).first()
                 db.session.delete(quest)
@@ -170,7 +171,7 @@ def editElection(uuid):
 @app.route('/api/election/<int:uuid>/activate', methods=['PUT'])
 def activateElection(uuid):
     election = Election.query.filter_by(id=uuid).first()
-    if(election['active'] == true):
+    if election['active'] == True:
         return "ERROR - Already active election"
     
     else:
