@@ -4,6 +4,7 @@ import './MyPollsPreview.css';
 
 class MyPollsPreview extends React.Component {
     render() {
+        // TODO add check for "active" in particular poll's properties
         const isFinished = (this.props.pollId != -1);
 
         // default unfinished draft
