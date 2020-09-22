@@ -1,0 +1,28 @@
+#previewBox {
+    width: 35%;
+    margin: 15px auto 15px;
+    padding: 5px;
+    border-radius: 10px;
+    display: block;
+    text-decoration: none;
+    text-align: left;
+}
+
+#pollName {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#pollId {
+    color: #444444;
+}
+
+#pollName, #pollId {
+    margin: 15px;
+}
+
+@media only screen and (max-width: 300px) {
+    #previewBox {
+        width: 80%;
+    }
+}
