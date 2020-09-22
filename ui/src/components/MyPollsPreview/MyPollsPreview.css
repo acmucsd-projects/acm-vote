@@ -8,6 +8,14 @@
     text-align: left;
 }
 
+.background-finished {
+    background-color: #816DFF;
+}
+
+.background-draft {
+    background-color: #62B0FF;
+}
+
 #pollName {
     color: #FFFFFF;
     font-weight: bold;
