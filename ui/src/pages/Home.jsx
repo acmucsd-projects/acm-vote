@@ -1,12 +1,15 @@
 import React from 'react';
+import graphic from "./acm-vote-graphic.png";
+
+console.log(graphic);
 
 function Home() {
     return (
         <div>
-            <h1>Home</h1>
-            <input type="button" value="Create New Poll"/>
-            <input type="button" value="View My Polls"/>
-            <input type="button" value="View All Polls"/>
+            <img src={graphic} alt="ACM Vote Ballot" />
+            <input type="button" class="vote-button" value="Vote"/>
+            <input type="button" class="create-button" value="Create Poll"/>
+            <input type="button" class="my-button" value="View My Polls"/>
         </div>
     );
 }
