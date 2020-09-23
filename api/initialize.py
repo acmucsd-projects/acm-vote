@@ -32,9 +32,9 @@ if SEED_DATA :
         db.session.commit()
 
 
-        q1 = Question(question="q1", votes='{ "q1answer1":{"description":null,"count":0}, "q1answer2":{"description":null,"count":0} }', voteType="FPTP")
-        q2 = Question(question="q2", votes='{ "answers": [{"name": "test1", "description": null}, {"name": "test2", "description": null}, {"name": "test3", "description": null}], "ballots":[]', voteType="STV")
-        q3 = Question(question="q3", votes='{ "q3answer1":{"description":null,"count":0}, "q3answer2":{"description":null,"count":0} }', voteType="FPTP")
+        q1 = Question(question="q1", votes='{ "questions"{"q1answer1":{"description":null,"count":0}, "q1answer2":{"description":null,"count":0}},"results":null,"audit":null }', voteType="FPTP")
+        q2 = Question(question="q2", votes='{ "answers": [{"name": "q2answer1", "description": null}, {"name": "q2answer2", "description": null}, {"name": "q2answer3", "description": null}], "ballots":[],"results":null,"audit":null}', voteType="STV")
+        q3 = Question(question="q3", votes='{ "questions"{"q3answer1":{"description":null,"count":0}, "q3answer2":{"description":null,"count":0}},"results":null,"audit":null }', voteType="FPTP")
 
         db.session.add_all([q1,q2,q3])
         db.session.commit()
@@ -45,7 +45,7 @@ if SEED_DATA :
         q3ID = Question.query.filter_by(question="q3").first().id
         
         e1 = Election(name='e1', description='test1', questions=[q1ID, q2ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
-        e2 = Election(name='e1', description='test1', questions=[q3ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
+        e2 = Election(name='e2', description='test2', questions=[q3ID], hasVoted=[], active=False, creator=-1, deadline=datetime.datetime(2025, 5, 17))
 
         db.session.add_all([e1,e2])
         db.session.commit()

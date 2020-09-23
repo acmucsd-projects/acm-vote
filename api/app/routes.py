@@ -63,17 +63,17 @@ def getAllVoters():
 #        {
 #            "question1":{
 #                answers:{
-#                   "test1":{"description": null, "count": 0},
-#                   "test2":{"description": null, "count": 0},
-#                   "test3":{"description": null, "count": 0},
+#                   "test1":{"description": null},
+#                   "test2":{"description": null},
+#                   "test3":{"description": null}
 #                },
 #                "type":"FPTP"
 #            },
 #            "question2":{
 #                answers:{
-#                   "test1":{"description": null, "count": 0},
-#                   "test2":{"description": null, "count": 0},
-#                   "test3":{"description": null, "count": 0},
+#                   "test1":{"description": null},
+#                   "test2":{"description": null},
+#                   "test3":{"description": null}
 #                },
 #                "type":"FPTP"
 #            }
@@ -87,13 +87,7 @@ def getAllVoters():
 # STV---------------------------------------
 #    questions:{
 #        "question":{
-#            "votes":{
-#                "answers": [{"name": "test1", "description": null}, {"name": "test2", "description": null}, {"name": "test3", "description": null}],
-#                "ballots": [
-#                    ["test1", "test2", "test3"],
-#                    ["test2", "test1", "test3"]
-#                ]
-#            },
+#            "answers": [{"name": "test1", "description": null}, {"name": "test2", "description": null}, {"name": "test3", "description": null}],
 #            "type":"STV"
 #         }
 #    }
@@ -105,9 +99,21 @@ def createNewElection():
     for q, d in data['questions'].items():
         quest = None
         if d['type'] == "FPTP":
-            quest = Question(question=q, votes=d['answers'], voteType=d['type'])
+            questions = {i:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
+            votes = {
+                "questions":questions,
+                "results":None,
+                "audit":None
+            }
+            quest = Question(question=q, votes=votes, voteType=d['type'])
         elif d['type'] == "STV":
-            quest = Question(question=q, votes=d['votes'], voteType=d['type'])
+            votes = {
+                "answers":d['answers'],
+                "ballots":list(),
+                "results":None,
+                "audit":None
+            }
+            quest = Question(question=q, votes=votes, voteType=d['type'])
 
         db.session.add(quest)
         db.session.commit()
@@ -241,9 +247,21 @@ def editElection(uuid):
             if 'id' not in d.keys():
                 quest = None
                 if d['type'] == "FPTP":
-                    quest = Question(question=q, votes=d['answers'], voteType=d['type'])
+                    questions = {i:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
+                    votes = {
+                        "questions":questions,
+                        "results":None,
+                        "audit":None
+                    }
+                    quest = Question(question=q, votes=votes, voteType=d['type'])
                 elif d['type'] == "STV":
-                    quest = Question(question=q, votes=d['votes'], voteType=d['type'])
+                    votes = {
+                        "answers":d['answers'],
+                        "ballots":list(),
+                        "results":None,
+                        "audit":None
+                    }
+                    quest = Question(question=q, votes=votes, voteType=d['type'])
 
                 db.session.add(quest)
                 db.session.flush()
@@ -263,19 +281,36 @@ def editElection(uuid):
                     db.session.flush()
                     db.session.refresh(quest)
                 
-                if d['answers'] != None:
-                    quest.answers = d['answers']
-                    
-                    db.session.add(quest) 
-                    db.session.flush()
-                    db.session.refresh(quest)
-
                 if d['type'] != None:
                     quest.type = d['type']
 
                     db.session.add(quest) 
                     db.session.flush()
                     db.session.refresh(quest) 
+
+                if d['answers'] != None:
+                    votes = None
+                    if quest.voteType == "FPTP":
+                        questions = {i:{"description":da['description'],"count":0} for i,da in d['answers'].items()}
+                        votes = {
+                            "questions":questions,
+                            "results":None,
+                            "audit":None
+                        }
+                        quest = Question(question=q, votes=votes, voteType=d['type'])
+                    elif quest.voteType == "STV":
+                        votes = {
+                            "answers":d['answers'],
+                            "ballots":list(),
+                            "results":None,
+                            "audit":None
+                        }
+
+                    quest.answers = votes
+                    
+                    db.session.add(quest) 
+                    db.session.flush()
+                    db.session.refresh(quest)
 
                 qID.append(quest.id)
 
@@ -395,7 +430,7 @@ def voteElection(uuid):
         answers = quest.votes
 
         if quest.voteType == "FPTP":
-            answers[a]['count'] += 1
+            answers['questions'][a]['count'] += 1
         elif quest.voteType == "STV":
             answers['ballots'] += a
 
