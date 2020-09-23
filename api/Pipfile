@@ -14,6 +14,7 @@ postgres = "*"
 psycopg2 = "*"
 requests = "*"
 pyjwt = "*"
+flask-cors = "*"
 
 [scripts]
 server = "flask run"

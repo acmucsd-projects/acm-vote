@@ -35,39 +35,79 @@ def getVoterLogin():
         db.session.add(newUser)
         db.session.commit()
 
-    return json.dump(r.json())
+    return json.dumps(r)
 
 @app.route('/api/user/<string:uuid>', methods=['GET'])
 def getVoterInfo(uuid):
-    r = requests.get(MEMBERSHIP_API + "api/v1/user/" + uuid, headers = request.headers)
-    return json.dump(r.json())
 
+    if 'Authorization' not in request.headers:
+        return "ERROR - No Authorization token provided", 401
+    
+    r = requests.get(MEMBERSHIP_API + "api/v1/user/" + uuid, headers = {"Authorization": request.headers["Authorization"]})
+
+    return r.text
+
+@app.route('/api/user', methods=['GET'])
+def getAllVoters():
+    # Return all the Users from the database
+    users = User.query.all()
+
+    # Create new list, to only returns their ID and their name
+    result = list(map(lambda x: {'id': x.id, 'name': x.userName}, users))
+
+    return json.dumps(result)
 #{
 #    name:"",
 #    description:"",
-#    questions:{
-#        "insert_question_here":{
-#            answers:["answer1","answer2","answer3"],
-#            type:""
-#        },
-#        "insert_question_here":{
-#            answers:["answer1","answer2","answer3"],
-#            type:""
-#        },
-#    }
-#    ,
+#    questions:{                    ######## FPTP
+#        {
+#            "question1":{
+#                answers:{
+#                   "test1":{"description": null, "count": 0},
+#                   "test2":{"description": null, "count": 0},
+#                   "test3":{"description": null, "count": 0},
+#                },
+#                "type":"FPTP"
+#            },
+#            "question2":{
+#                answers:{
+#                   "test1":{"description": null, "count": 0},
+#                   "test2":{"description": null, "count": 0},
+#                   "test3":{"description": null, "count": 0},
+#                },
+#                "type":"FPTP"
+#            }
+#        }
+#    },
 #    users:[list here],
 #    creator:[ID here],
 #    deadline:[datetime here] (Example: [YR,MON,DAY,MIN,HR] "Numerical")
 #}
+#
+# STV---------------------------------------
+#    questions:{
+#        "question":{
+#            "votes":{
+#                "answers": [{"name": "test1", "description": null}, {"name": "test2", "description": null}, {"name": "test3", "description": null}],
+#                "ballots": [
+#                    ["test1", "test2", "test3"],
+#                    ["test2", "test1", "test3"]
+#                ]
+#            },
+#            "type":"STV"
+#         }
+#    }
+#
 @app.route('/api/election', methods=['POST'])
 def createNewElection():
     data = request.json
     questions = []
     for q, d in data['questions'].items():
-        answers = {d['answers'][i]:0 for i in range(0, len(d['answers']), 1)}
-
-        quest = Question(question=q, votes=answers, voteType=d['type'])
+        quest = None
+        if d['type'] == "FPTP":
+            quest = Question(question=q, votes=d['answers'], voteType=d['type'])
+        elif d['type'] == "STV":
+            quest = Question(question=q, votes=d['votes'], voteType=d['type'])
 
         db.session.add(quest)
         db.session.commit()
@@ -157,21 +197,8 @@ def deleteElection(uuid):
 #    description:None,
 #    deadline:None [YR,MON,DAY,MIN,HR] "Numerical",
 #
-#    questions:[
-#       {
-#            id:-1         (-1 if N/A or not passed at all)
-#            question:""
-#            answers:["answer1","answer2","answer3"],
-#            type:""
-#       },
-#       {
-#            
-#            id:          (-1 if N/A)
-#            question:None
-#            answers:None,
-#            type:None
-#       }
-#    ],
+#    questions:{        #### See create task for the format - include "id":## if editing an existing question,anything you dont want to change while editing, leave null
+#    }
 #
 #    voters:[]
 #}
@@ -212,8 +239,11 @@ def editElection(uuid):
         qID = list()
         for d in data['questions']:
             if 'id' not in d.keys():
-                answers = {d['answers'][i]:0 for i in range(0, len(d['answers']), 1)}
-                quest = Question(question=d['question'], votes=answers, voteType=d['type'])
+                quest = None
+                if d['type'] == "FPTP":
+                    quest = Question(question=q, votes=d['answers'], voteType=d['type'])
+                elif d['type'] == "STV":
+                    quest = Question(question=q, votes=d['votes'], voteType=d['type'])
 
                 db.session.add(quest)
                 db.session.flush()
@@ -234,7 +264,7 @@ def editElection(uuid):
                     db.session.refresh(quest)
                 
                 if d['answers'] != None:
-                    quest.answers = {d['answers'][i]:0 for i in range(0, len(q['answers']), 1)}
+                    quest.answers = d['answers']
                     
                     db.session.add(quest) 
                     db.session.flush()
@@ -303,54 +333,72 @@ def activateElection(uuid):
         election.active = True
         db.session.commit()
 
-#{
-#   questions:{
-#       id:answerChoice,
-#       id:answerChoice
+#FPTP
+#    {                    ######## FPTP
+#        "id":"name",
+#        "id":"name",
+#        
+#    },
+#
+# STV
+#    {
+#        "id":["name1", "name2", "name3"],
+#        "id":["name2", "name1", "name3"]
+#    }
+#
+# Note, an election can have both STV and FPTP questions (if it has multiple questions) 
+#   {
+#        "id":"name",
+#        "id":["name1", "name2", "name3"],
+#        "id":["name2", "name1", "name3"]
 #   }
-#}
+#
+# 
+# 
 @app.route('/api/election/<int:uuid>/vote', methods=['POST'])
 def voteElection(uuid):
     head = request.headers
     auth = head['Authorization']
     tok = auth.split(" ")[1]
 
-    info = requests.post(MEMBERSHIP_API + "api/v1/auth/verification", headers=request.headers)
-    k = info['authenticated']
+    info = requests.post(MEMBERSHIP_API + "api/v1/auth/verification", headers={"Authorization": request.headers["Authorization"]})
 
-    if k = False:
+    k = info.json()['authenticated']
+
+    if k == False:
         return "ERROR - User did not authenticate properly", 401
 
-    claims = jwt.decode(tok, verify=False)
-
-
-    data = request.json
-    qID = list(map(lambda x: int(x), data['questions'].keys()))
 
     user = User.query.filter_by(uuid=claims['uuid']).first()
     
-    
     if uuid not in user.canVote:
         return "ERROR - User is not allowed to vote for election", 403
-
     
-    elect = Election.query.filter_by(id=uuid).first()
-    e = elect.to_json()
-    eQID = e['questions']
 
-    if data['user'] in e['hasVoted']:
+    elect = Election.query.filter_by(id=uuid).first()
+
+    if user.id in elect.hasVoted:
         return "ERROR - User has voted for election", 403
 
+    data = request.json
+    qID = list(map(lambda x: int(x), list(data['questions'].keys())))
+    e = elect.to_json()
+    eQID = e['questions']
 
     if qID.sort() != eQID.sort():
         return "ERROR - Question IDs do not match those stored for this election", 400
 
-    elect.hasVoted += [data['user']]
+    elect.hasVoted += [user.id]
 
-    for i, a in data['questions'].items():
+    for i, a in data.items():
         quest = Question.query.filter_by(id=int(i)).first()
         answers = quest.votes
-        answers[a] += 1
+
+        if quest.voteType == "FPTP":
+            answers[a]['count'] += 1
+        elif quest.voteType == "STV":
+            answers['ballots'] += a
+
         quest.votes = json.dumps(answers)
         db.session.add(quest)
         db.session.flush()

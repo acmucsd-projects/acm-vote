@@ -19,10 +19,10 @@ if SEED_DATA :
 
     for u in users:
         uName = u['firstName'] + " " + u['lastName']
-        
+
         board = False
 
-        newUser = User(userName=uName, uuid="null", canVote=[], boardMember=board)
+        newUser = User(userName=uName, uuid=u['uuid'], canVote=[], boardMember=board)
         db.session.add(newUser)
     db.session.commit()
 
