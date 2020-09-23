@@ -15,15 +15,15 @@
 .acm-logo {
     max-height: 6vh;
     max-width: 25vh;
-    margin-top: 10px;
+    margin-top: 3px;
     margin-left: 5vw;
     float: left;
 }
 
 .hamburger {
-    max-height: 5vh;
-    max-width: 5vh;
-    margin-top: 15px;
+    max-height: 4vh;
+    max-width: 4vh;
+    margin-top: 11px;
     margin-right: 5vw;
     float: right;
 }
