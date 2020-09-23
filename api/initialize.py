@@ -32,9 +32,9 @@ if SEED_DATA :
         db.session.commit()
 
 
-        q1 = Question(question="q1", votes='{ "q1answer1":0, "q1answer2":0 }', voteType="SPTP")
-        q2 = Question(question="q2", votes='{ "q2answer1":0, "q2answer2":0 }', voteType="Proportional")
-        q3 = Question(question="q3", votes='{ "q3answer1":0, "q3answer2":0 }', voteType="SPTP")
+        q1 = Question(question="q1", votes='{ "q1answer1":{"description":null,"count":0}, "q1answer2":{"description":null,"count":0} }', voteType="FPTP")
+        q2 = Question(question="q2", votes='{ "answers": [{"name": "test1", "description": null}, {"name": "test2", "description": null}, {"name": "test3", "description": null}], "ballots":[]', voteType="STV")
+        q3 = Question(question="q3", votes='{ "q3answer1":{"description":null,"count":0}, "q3answer2":{"description":null,"count":0} }', voteType="FPTP")
 
         db.session.add_all([q1,q2,q3])
         db.session.commit()
