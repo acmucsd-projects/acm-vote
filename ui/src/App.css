@@ -79,6 +79,7 @@ input[type=button]:hover {
 /* Responsive for phone screen */
 @media only screen and (max-width: 768px) {
   input {
+    width: 50%;
     width:50%;
   }
 }
