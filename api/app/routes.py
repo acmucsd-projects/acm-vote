@@ -158,9 +158,9 @@ def createNewElection():
     if data['users'] == [0]:
         users = User.query.all()
         def addElectionFromUserVoteList(x):
-            x.canVote = x.canVote + [uuid]
+            x.canVote = x.canVote + [elect.id]
             return x
-        users = map(addElectionFromUserVoteList, users)    
+        users = map(addElectionFromUserVoteList, users+[user.id])    
         db.session.add_all(users)
         db.session.flush()
     
@@ -508,6 +508,10 @@ def voteElection(uuid):
     if user.id in elect.hasVoted:
         return "ERROR - User has voted for election", 403
 
+    currentTime = datetime.datetime.now()
+    if currentTime > elect.deadline:
+        return "ERROR - Deadline to vote for election has passed! Check the results!", 403
+
     data = request.json
     qID = list(map(lambda x: int(x), list(data.keys())))
     e = elect.to_json()
@@ -563,16 +567,67 @@ def getElectionResults(uuid):
 
     elect = Election.query.filter_by(id=uuid).first()
 
-    q = Question.query.filter_by(election.questions[0]).first()
+    if elect.active == False:
+        return "ERROR - Election is not active yet", 403
 
-    if q.results == None:
+    currentTime = datetime.datetime.now()
+    if currentTime < elect.deadline:
+        return "ERROR - Deadline to vote for election has not passed yet! Go vote!", 403
+
+    q = Question.query.filter_by(id=elect.questions[0]).first()
+
+    if q.votes['results'] == None:
         calculateElectionResults(elect)
 
-    return jsonify({'winner': elect.votes["results"])})
+    result = dict()
+    for i in elect.questions:
+        q = Question.query.filter_by(id=i).first()
+        result.update({q.question:{'winner': q.votes["results"]}})
+
+    return jsonify(result)
 
 @app.route('/api/election/<int:uuid>/audit', methods=['GET'])
 def auditElectionResults(uuid):
-    return "Hello, World!"
+    head = request.headers
+
+    if 'Authorization' not in head:
+        return "ERROR - Bearer Token not found", 401
+    
+    auth = head['Authorization']
+
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
+    tok = auth.split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    
+    # Checking User Database
+    user = User.query.filter_by(uuid=claim['uuid']).first()
+
+    if uuid not in user.canVote:
+        return "ERROR - User not allowed to access this election", 403
+
+    elect = Election.query.filter_by(id=uuid).first()
+
+    if elect.active == False:
+        return "ERROR - Election is not active yet", 403
+
+    currentTime = datetime.datetime.now()
+    if currentTime < elect.deadline:
+        return "ERROR - Deadline to vote for election has not passed yet! Go vote!", 403
+
+    q = Question.query.filter_by(id=elect.questions[0]).first()
+
+    if q.votes['results'] == None:
+        calculateElectionResults(elect)
+
+    result = dict()
+    for i in elect.questions:
+        q = Question.query.filter_by(id=i).first()
+        result.update({q.question:{"audit": q.votes["audit"]}})
+
+    return jsonify(result)
 
 #                
 #                answers:{
@@ -585,36 +640,57 @@ def calculateElectionResults(election):
     for i in election.questions:
         q = Question.query.filter_by(id=i).first()
         if q.voteType == "FPTP":
-            winnerVote = {'first': {'description': "", 'count': 0}
-            ties = []
-            for name, details in q.votes["answers"]:
+            winnerVote = {'first': {'description': "", 'count': 0}}
+            ties = list()
+            for name, details in q.votes["answers"].items():
                 if details['count'] > winnerVote[next(iter(winnerVote))]['count']:
                     winnerVote = {name: details}
                     ties = []
                 elif details['count'] == winnerVote[next(iter(winnerVote))]['count']:
-                    ties += {name: details}
+                    ties += [{name: details}]
+                    
             q.votes["results"] = [winnerVote] + ties
+            audit = f"Answer {next(iter(winnerVote))} won by having highest number of votes, {winnerVote[next(iter(winnerVote))]['count']}."
+            if len(ties) == 0:
+                audit += " There were no ties."
+            else:
+                audit += f" There were ties as well: "
+                for tie in ties:
+                    audit += ", ".join([next(iter(tie)), str(tie[next(iter(tie))]['count'])]) + "; "
+            q.votes["audit"] = audit
+            
+            flag_modified(q, "votes")
+
             db.session.add(q)
             db.session.flush()
         elif q.voteType == "STV":
-            canidates = map(lambda x :Canidate(x['name']), q.votes['answers'])
-            fullBallots = ballotify(q.votes['ballots'],canidates)
+            candidates = list(map(lambda x :Candidate(x['name']), q.votes['answers']))
+
+            fullBallots = ballotify(q.votes['ballots'],candidates)
 
             results = pyrankvote.single_transferable_vote(candidates, fullBallots, number_of_seats=1)
             winner = results.get_winners()
+            print(f"Winner for STV question: {winner}")
+            print(f"Audit for STV question:\n{results}")
 
-            winnerDetails = filter(lambda x: x['name'] == str(winner) ,q.votes[answers])
-            
+            winnerDetails = list(filter(lambda x: x['name'] == str(winner[0]) ,q.votes['answers']))
+            print(winnerDetails)
+
             q.votes["results"] = winnerDetails
+            q.votes['audit'] = str(results)
+            flag_modified(q, "votes")
+
             db.session.add(q)
             db.session.flush()
+    db.session.commit()
 
 
-def ballotify(ballotList,canidates):
+def ballotify(ballotList,candidates):
     ballots = list()
     for l in ballotList:
-        sinBal = map(lambda x: filter(lambda c:str(c) == x, canidates)[0],l)
+        sinBal = list(map(lambda x: next(filter(lambda c:str(c) == x, candidates)),l))
         ballots.append(Ballot(sinBal))
+        print(sinBal)
     return ballots
 
     
