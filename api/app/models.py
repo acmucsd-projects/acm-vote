@@ -40,7 +40,7 @@ class Question(db.Model):
         return {
             "id": self.id,
             "question": self.question,
-            "votes": str(self.votes),
+            "votes": self.votes,
             "voteType": self.voteType,
         }
 

@@ -2,10 +2,14 @@ from . import app, db
 from .models import Question,Election, User
 from .config import TOKEN, MEMBERSHIP_API
 from flask import jsonify, request
+from sqlalchemy.orm.attributes import flag_modified
 import json
 import requests
 import datetime
+import dateutil.parser
 import jwt
+import pyrankvote
+from pyrankvote import Candidate,Ballot
 
 @app.route('/api/user/login', methods=['POST'])
 def getVoterLogin():
@@ -21,21 +25,24 @@ def getVoterLogin():
     
     r = requests.post(MEMBERSHIP_API + 'api/v1/auth/login', data = json.dumps(payload), headers=headers).json()
 
+    if r["error"] != None:
+        return jsonify(r), 500
+
     claim = jwt.decode(r['token'], verify=False)
     
     # Checking User Database
     result = User.query.filter_by(uuid=claim['uuid']).first()
 
-    if(result == None):
-        info = requests.get(MEMBERSHIP_API + "api/v1/user/" + uuid, headers = {"Authorization": f"Bearer {r['token']}"})
-        uName = info['firstName'] + " " + info['lastName']
+    if result == None:
+        info = requests.get(MEMBERSHIP_API + "api/v1/user/" + claim['uuid'], headers = {"Authorization": f"Bearer {r['token']}"})
+        uName = info.json()["user"]["firstName"] + " " + info.json()["user"]["lastName"]
         
         newUser = User(userName=uName,uuid=claim['uuid'],canVote=[],boardMember=False)
 
         db.session.add(newUser)
         db.session.commit()
 
-    return json.dumps(r)
+    return jsonify(r)
 
 @app.route('/api/user/<string:uuid>', methods=['GET'])
 def getVoterInfo(uuid):
@@ -45,7 +52,7 @@ def getVoterInfo(uuid):
     
     r = requests.get(MEMBERSHIP_API + "api/v1/user/" + uuid, headers = {"Authorization": request.headers["Authorization"]})
 
-    return r.text
+    return jsonify(r.json())
 
 @app.route('/api/user', methods=['GET'])
 def getAllVoters():
@@ -55,7 +62,7 @@ def getAllVoters():
     # Create new list, to only returns their ID and their name
     result = list(map(lambda x: {'id': x.id, 'name': x.userName}, users))
 
-    return json.dumps(result)
+    return jsonify(result)
 #{
 #    name:"",
 #    description:"",
@@ -80,8 +87,7 @@ def getAllVoters():
 #        }
 #    },
 #    users:[list here],
-#    creator:[ID here],
-#    deadline:[datetime here] (Example: [YR,MON,DAY,MIN,HR] "Numerical")
+#    deadline:[datetime here] ISO format
 #}
 #
 # STV---------------------------------------
@@ -94,14 +100,35 @@ def getAllVoters():
 #
 @app.route('/api/election', methods=['POST'])
 def createNewElection():
+
+    head = request.headers
+
+    if 'Authorization' not in head:
+        return "ERROR - Bearer Token not found", 401
+    
+    auth = head['Authorization']
+
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
+    tok = auth.split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    
+    # Checking User Database
+    user = User.query.filter_by(uuid=claim['uuid']).first()
+
+    if user == None:
+        return "ERROR - Claimed user not found", 403
+
     data = request.json
     questions = []
     for q, d in data['questions'].items():
         quest = None
         if d['type'] == "FPTP":
-            questions = {i:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
+            que = {i:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
             votes = {
-                "questions":questions,
+                "answers":que,
                 "results":None,
                 "audit":None
             }
@@ -119,10 +146,9 @@ def createNewElection():
         db.session.commit()
         questions.append(quest.id)
     
-    dInfo =data['deadline']
-    date = datetime.datetime(dInfo[0],dInfo[1],dInfo[2],minute=dInfo[3],hour=dInfo[4])
+    date = dateutil.parser.parse(data["deadline"])
 
-    elect = Election(name=data['name'], description=data['description'], questions=questions, hasVoted=[],active=False, creator=data['creator'], deadline=date)
+    elect = Election(name=data['name'], description=data['description'], questions=questions, hasVoted=[],active=False, creator=user.id, deadline=date)
     db.session.add(elect)
     db.session.flush()
     db.session.refresh(elect)
@@ -139,7 +165,7 @@ def createNewElection():
         db.session.flush()
     
     else:
-        for u in data['users']:
+        for u in data['users'] + [user.id]:
             user = db.session.query(User).filter_by(id=u).first()
 
             v = user.canVote.copy()
@@ -151,12 +177,35 @@ def createNewElection():
 
     db.session.commit()
     db.session.refresh(elect)
-    return json.dumps(elect.to_json())
+    return jsonify(elect.to_json())
 
 @app.route('/api/election', methods=['GET'])
 def getElections():
-    elects = Election.query.all()
+
+    head = request.headers
+
+    if 'Authorization' not in head:
+        return "ERROR - Bearer Token not found", 401
+    
+    auth = head['Authorization']
+
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
+    tok = auth.split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    
+    # Checking User Database
+    user = User.query.filter_by(uuid=claim['uuid']).first()
+
+    if user == None:
+        return "ERROR - Claimed user not found", 403
+
+    elects = db.session.query(Election).filter(Election.id.in_(user.canVote),Election.active==True)
     result = [x.to_json() for x in elects]
+    drafts = db.session.query(Election).filter(Election.creator==user.id, Election.active==False)
+    result += [x.to_json() for x in drafts]
     return jsonify(result)
 
 @app.route('/api/election/<int:uuid>', methods=['GET'])
@@ -171,7 +220,7 @@ def getElection(uuid):
         "election": elect,
         "questions": que
     }
-    return json.dumps(result)
+    return jsonify(result)
 
 @app.route('/api/election/<int:uuid>', methods=['DELETE'])
 def deleteElection(uuid):
@@ -194,11 +243,10 @@ def deleteElection(uuid):
             "election":elect,
             "questions":q
         }
-        return json.dumps(result)
+        return jsonify(result)
 
 # Note: Generally leave items None if no change, else, the value is replaced
 # {
-#    editor:10,
 #    name:None,
 #    description:None,
 #    deadline:None [YR,MON,DAY,MIN,HR] "Numerical",
@@ -210,12 +258,28 @@ def deleteElection(uuid):
 #}
 @app.route('/api/election/<int:uuid>', methods=['PATCH'])
 def editElection(uuid):
+    if 'Authorization' not in request.headers:
+        return "ERROR - Bearer Token not found", 401
+    
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
     data = request.json
     election = Election.query.filter_by(id=uuid).first()
+    if election == None:
+        return "ERROR - Election does not exist", 404
+
     elect = election.to_json()
+
+    tok = request.headers['Authorization'].split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    creator = User.query.filter_by(id=elect['creator']).first()
 
     if elect['active'] == True:
         return "ERROR - Cannot edit active election", 403
+    elif creator.uuid != claim['uuid']:
+        return "ERROR - You are not the creator of this election", 403
 
     else:
         if data['name'] != None:
@@ -233,8 +297,7 @@ def editElection(uuid):
             db.session.refresh(election)
 
         if data['deadline'] != None :
-            dInfo = data['deadline']
-            date = datetime.datetime(dInfo[0],dInfo[1],dInfo[2],minute=dInfo[3],hour=dInfo[4])
+            date = dateutil.parser.parse(data["deadline"])
 
             election.date = date
 
@@ -243,13 +306,13 @@ def editElection(uuid):
             db.session.refresh(election)
 
         qID = list()
-        for d in data['questions']:
+        for q, d in data['questions'].items():
             if 'id' not in d.keys():
                 quest = None
                 if d['type'] == "FPTP":
-                    questions = {i:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
+                    questions = {q:{"description":d['description'],"count":0} for i,d in d['answers'].items()}
                     votes = {
-                        "questions":questions,
+                        "answers":questions,
                         "results":None,
                         "audit":None
                     }
@@ -293,7 +356,7 @@ def editElection(uuid):
                     if quest.voteType == "FPTP":
                         questions = {i:{"description":da['description'],"count":0} for i,da in d['answers'].items()}
                         votes = {
-                            "questions":questions,
+                            "answers":questions,
                             "results":None,
                             "audit":None
                         }
@@ -331,8 +394,8 @@ def editElection(uuid):
             db.session.flush()
             db.session.refresh(election)
 
-        rUsers = db.session.query(User).filter(User.canVote.contains([uuid]), ~User.id.in_(data['voters']))
-        aUsers = db.session.query(User).filter(~User.canVote.contains([uuid]), User.id.in_(data['voters']))
+        rUsers = db.session.query(User).filter(User.canVote.contains([uuid]), ~User.id.in_(data['voters'] + [creator.id]))
+        aUsers = db.session.query(User).filter(~User.canVote.contains([uuid]), User.id.in_(data['voters'] + [creator.id]))
         
         def addElectionFromUserVoteList(x):
             x.canVote = x.canVote + [uuid]
@@ -355,18 +418,38 @@ def editElection(uuid):
     db.session.refresh(election)
     elect = election.to_json()
 
-    return json.dumps(elect)
+    return jsonify(elect)
 
 @app.route('/api/election/<int:uuid>/activate', methods=['PUT'])
 def activateElection(uuid):
+    if 'Authorization' not in request.headers:
+        return "ERROR - Bearer Token not found", 401
+    
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
     election = Election.query.filter_by(id=uuid).first()
+    if election == None:
+        return "ERROR - Election does not exist", 404
+
     elect = election.to_json()
+
+    tok = request.headers['Authorization'].split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    creator = User.query.filter_by(id=elect['creator']).first()
+
+    if creator.uuid != claim['uuid']:
+        return "ERROR - You are not the creator of this election", 403
+    
     if elect['active'] == True:
         return "ERROR - Already active election", 403
     
     else:
         election.active = True
         db.session.commit()
+        db.session.refresh(election)
+        return "Success! Election " + str(election.id) + " activated", 200
 
 #FPTP
 #    {                    ######## FPTP
@@ -403,49 +486,135 @@ def voteElection(uuid):
     if k == False:
         return "ERROR - User did not authenticate properly", 401
 
+    elect = Election.query.filter_by(id=uuid).first()
 
-    user = User.query.filter_by(uuid=claims['uuid']).first()
+    if elect == None:
+        return "ERROR - Election not found", 404
     
+    if elect.active == False:
+        return "ERROR - Election not active", 403
+
+
+    claim = jwt.decode(tok, verify=False)
+
+    user = User.query.filter_by(uuid=claim['uuid']).first()
+
+    if user == None:
+        return "ERROR - Claimed user not found", 403
+
     if uuid not in user.canVote:
         return "ERROR - User is not allowed to vote for election", 403
-    
-
-    elect = Election.query.filter_by(id=uuid).first()
 
     if user.id in elect.hasVoted:
         return "ERROR - User has voted for election", 403
 
     data = request.json
-    qID = list(map(lambda x: int(x), list(data['questions'].keys())))
+    qID = list(map(lambda x: int(x), list(data.keys())))
     e = elect.to_json()
     eQID = e['questions']
 
     if qID.sort() != eQID.sort():
         return "ERROR - Question IDs do not match those stored for this election", 400
 
-    elect.hasVoted += [user.id]
+    elect.hasVoted = elect.hasVoted + [user.id]
+
+    db.session.add(elect)
+    db.session.flush()
 
     for i, a in data.items():
-        quest = Question.query.filter_by(id=int(i)).first()
-        answers = quest.votes
+        quest = db.session.query(Question).filter_by(id=int(i)).first()
+        answers = quest.votes.copy()
 
         if quest.voteType == "FPTP":
-            answers['questions'][a]['count'] += 1
+            answers['answers'][a]['count'] += 1
         elif quest.voteType == "STV":
-            answers['ballots'] += a
+            answers['ballots'] = answers['ballots'] + [a]
 
-        quest.votes = json.dumps(answers)
+        quest.votes = answers
+        flag_modified(quest, "votes")
+
         db.session.add(quest)
         db.session.flush()
 
     db.session.commit()
-
-    return "Vote Stored!",200
+    return "Vote Stored!", 200
 
 @app.route('/api/election/<int:uuid>/results', methods=['GET'])
 def getElectionResults(uuid):
-    return "Hello, World!"
+    head = request.headers
+
+    if 'Authorization' not in head:
+        return "ERROR - Bearer Token not found", 401
+    
+    auth = head['Authorization']
+
+    r = requests.post(MEMBERSHIP_API + 'api/v1/auth/verification', headers = {"Authorization": request.headers["Authorization"]})
+    if r.json()["authenticated"] == False:
+        return "ERROR - invalid JWT", 403
+
+    tok = auth.split(" ")[1]
+    claim = jwt.decode(tok, verify=False)
+    
+    # Checking User Database
+    user = User.query.filter_by(uuid=claim['uuid']).first()
+
+    if uuid not in user.canVote:
+        return "ERROR - User not allowed to access this election", 403
+
+    elect = Election.query.filter_by(id=uuid).first()
+
+    q = Question.query.filter_by(election.questions[0]).first()
+
+    if q.results == None:
+        calculateElectionResults(elect)
+
+    return jsonify({'winner': elect.votes["results"])})
 
 @app.route('/api/election/<int:uuid>/audit', methods=['GET'])
 def auditElectionResults(uuid):
     return "Hello, World!"
+
+#                
+#                answers:{
+#                   "test1":{"description": null, count:0},
+#                   "test2":{"description": null, count:0},
+#                   "test3":{"description": null, count:0}
+#                },
+# Make a separate func for calculating votes here
+def calculateElectionResults(election):
+    for i in election.questions:
+        q = Question.query.filter_by(id=i).first()
+        if q.voteType == "FPTP":
+            winnerVote = {'first': {'description': "", 'count': 0}
+            ties = []
+            for name, details in q.votes["answers"]:
+                if details['count'] > winnerVote[next(iter(winnerVote))]['count']:
+                    winnerVote = {name: details}
+                    ties = []
+                elif details['count'] == winnerVote[next(iter(winnerVote))]['count']:
+                    ties += {name: details}
+            q.votes["results"] = [winnerVote] + ties
+            db.session.add(q)
+            db.session.flush()
+        elif q.voteType == "STV":
+            canidates = map(lambda x :Canidate(x['name']), q.votes['answers'])
+            fullBallots = ballotify(q.votes['ballots'],canidates)
+
+            results = pyrankvote.single_transferable_vote(candidates, fullBallots, number_of_seats=1)
+            winner = results.get_winners()
+
+            winnerDetails = filter(lambda x: x['name'] == str(winner) ,q.votes[answers])
+            
+            q.votes["results"] = winnerDetails
+            db.session.add(q)
+            db.session.flush()
+
+
+def ballotify(ballotList,canidates):
+    ballots = list()
+    for l in ballotList:
+        sinBal = map(lambda x: filter(lambda c:str(c) == x, canidates)[0],l)
+        ballots.append(Ballot(sinBal))
+    return ballots
+
+    

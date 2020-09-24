@@ -15,6 +15,7 @@ psycopg2 = "*"
 requests = "*"
 pyjwt = "*"
 flask-cors = "*"
+pyrankvote = "*"
 
 [scripts]
 server = "flask run"
