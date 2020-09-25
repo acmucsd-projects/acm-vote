@@ -3,16 +3,24 @@
     "name": "Cereal or Milk First",
     "description": "Why would you put cereal first lol",
     "questions": [
-        {
-            "optionName": "Cereal first",
-            "description": "But whyyyyyy :("
-        },
-        {
-            "optionName": "Milk first",
-            "description": "Welcome to the correct gang >:D"
-        }
+    {
+        "id": 0,
+        "question": "Question 0",
+        "votes":[
+            {
+                "optionName": "Cereal first",
+                "description": "But whyyyyyy :(",
+                "votes": 1
+            },
+            {
+                "optionName": "Milk first",
+                "description": "Welcome to the correct gang >:D",
+                "votes": 10
+            }
+        ]
+    }
     ],
     "active": true,
     "creator": 1234567,
-    "deadline": "2020-09-20"
+    "deadline": "2020-09-30"
 }

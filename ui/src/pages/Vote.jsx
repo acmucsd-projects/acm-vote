@@ -29,7 +29,7 @@ const Vote = () => {
             pollDescription={election.description} deadline={election.deadline} 
             setCurrPage={setCurrPage} /> : currPage === 1 ? 
             <PollVoteMain pollTitle={election.name} pollDescription={election.description}
-            pollOptions={election.questions} deadline={election.deadline}
+            pollOptions={election.questions[0].votes} deadline={election.deadline}
             setCurrPage={setCurrPage}/> : 
             <ViewResults />;
 
