@@ -43,3 +43,11 @@
     background-color: #e981a0;
     border: 1px solid #e981a0;
 }
+
+#view-results-center-content {
+    align-content: center;
+}
+
+#num-votes {
+    font-size: 30px;
+}
