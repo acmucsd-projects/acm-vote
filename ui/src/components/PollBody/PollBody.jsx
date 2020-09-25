@@ -7,7 +7,7 @@ import ConfirmDetails from '../ConfirmDetails/ConfirmDetails';
 import API from '../../API';
 import './PollBody.css';
 
-const PollBody = () => {
+const PollBody = ({uuid}) => {
     const [currPage, setCurrPage] = useState(0);
     const [privacy, setPrivacy] = useState('private');
 
@@ -16,7 +16,10 @@ const PollBody = () => {
     const [pollType, setPollType] = useState("");
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
-    const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
+    const [options, setOptions] = useState([
+        {optionName: "", description:"", votes: 0}, 
+        {optionName:"", description:"", votes: 0}
+    ]);
 
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options', 'Confirm Details', 'Expiration'];
@@ -51,12 +54,26 @@ const PollBody = () => {
 
     /* Top button function: Creating the Poll */
     const createPoll = async() => {
+        const votes = options.filter(option => {
+            return option.optionName && option.description;
+        })
+
+        // Will probably support multiple questions in the future!
+        const questions = [{
+            id: 0,
+            question: "Question 0",
+            votes: votes,
+            voteType: pollType
+        }]
+
         const payload = {
             pollTitle: pollTitle,
             pollDescription: pollDescription,
-            options: options,
-            deadline: pollExpiration
+            questions: questions,
+            deadline: pollExpiration,
+            creator: uuid
         }
+        
         await API.createPoll(payload);
         console.log("Yeet");
     }
