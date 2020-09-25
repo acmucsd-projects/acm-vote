@@ -18,7 +18,7 @@ const ConfirmDetails = (props) => {
     };
 
     const privacySection = () => {
-        return privacy === 'public' ? publicPoll() : privatePoll();  
+        return privacy === 'public' ? publicPoll() : privatePoll();
     }
 
     return (

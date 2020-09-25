@@ -52,19 +52,35 @@ input[type=text], input[type=password] {
 }
 
 input[type=button] {
-  background: #C4C4C4;
+  /*background: #C4C4C4;*/
+  color: #FFFFFF;
   border: none;
+  border-radius: 50px;
 }
 
 input[type=button]:hover {
-  background: #909090;
+  /*background: #909090;*/
+  filter: brightness(70%);
   cursor: pointer;
+}
+
+.vote-button {
+    background: #816DFF;
+}
+
+.create-button {
+    background: #62B0FF;
+}
+
+.my-button {
+    background: #E981A0;
 }
 
 /* Responsive for phone screen */
 @media only screen and (max-width: 768px) {
   input {
-    width: 85%;
+    width: 50%;
+    width:50%;
   }
 }
 

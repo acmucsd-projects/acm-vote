@@ -5,12 +5,25 @@
     padding-top: 1vh;
     top: 0px;
     left: 0px;
+    padding-bottom: 10px;
+    border-bottom: 10px solid;
+    border-image-slice: 1;
+    border-width: 6px;
+    border-image-source: linear-gradient(to right, #816DFF, #62B0FF, #FFD51E, #E981A0);
 }
 
-.profile-pic {
-    max-height: 8vh;
-    max-width: 8vh;
+.acm-logo {
+    max-height: 6vh;
+    max-width: 25vh;
+    margin-top: 3px;
+    margin-left: 5vw;
+    float: left;
+}
+
+.hamburger {
+    max-height: 4vh;
+    max-width: 4vh;
+    margin-top: 11px;
     margin-right: 5vw;
-    border-radius: 50%;
     float: right;
 }
