@@ -51,12 +51,28 @@ const PollBody = () => {
 
     /* Top button function: Creating the Poll */
     const createPoll = async() => {
+        let votes = {};
+            options.forEach((option) => { // votes meaning the option array
+            votes[optionName] = {
+                "description": option.description
+            }
+        })
+
+        // Will probably support multiple questions in the future!
+        const questions = [{
+            "Question 0":{
+                answers:votes,
+                voteType: pollType
+            }
+        }]
+
         const payload = {
             pollTitle: pollTitle,
             pollDescription: pollDescription,
-            options: options,
-            deadline: pollExpiration
+            questions: questions,
+            deadline: pollExpiration,
         }
+        
         await API.createPoll(payload);
         console.log("Yeet");
     }
