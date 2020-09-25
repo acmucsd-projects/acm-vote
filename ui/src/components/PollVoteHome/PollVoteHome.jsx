@@ -74,7 +74,7 @@ const PollVoteHome = (props) => {
     return (
         <div className="page-body vote-page-body">
             <h1>{pollTitle}</h1>
-            <p id="poll-id-vote">Poll ID: {pollId}</p>
+            <p className="poll-id-vote">Poll ID: {pollId}</p>
             <p>Vote by: {deadline}</p>
             <p>{pollDescription}</p>
             <div className="vote-buttons-container">

@@ -11,10 +11,10 @@
 }
 
 .vote-page-body h1 {
-    margin-bottom: 2vh;
+    margin-bottom: 5vh;
 }
 
-#poll-id-vote {
+.poll-id-vote {
     font-size: 25px;
     margin-bottom: 5vh;
 }

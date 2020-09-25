@@ -2,8 +2,7 @@
     "id": 10086, 
     "name": "Cereal or Milk First",
     "description": "Why would you put cereal first lol",
-    "questions": [
-    {
+    "questions": [{
         "id": 0,
         "question": "Question 0",
         "votes":[
@@ -18,9 +17,9 @@
                 "votes": 10
             }
         ]
-    }
-    ],
+    }],
+    "hasVoted": [1,2,3,4,5,6,7,8,9,10,11],
     "active": true,
     "creator": 1234567,
-    "deadline": "2020-09-30"
+    "deadline": "2020-09-20"
 }

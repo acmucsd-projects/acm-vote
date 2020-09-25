@@ -38,3 +38,8 @@
         margin: 1vh 25%;
     }
 }
+
+#view-results-go-home-button {
+    background-color: #e981a0;
+    border: 1px solid #e981a0;
+}

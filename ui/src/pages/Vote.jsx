@@ -12,6 +12,7 @@ const Vote = () => {
     const {uuid} = useParams();
     const [currPage, setCurrPage] = useState(0);
     const [election, setElection] = useState({});
+    const [orderedOptions, setOrderedOptions] = useState([]);
     useEffect(() => {
         /*API.getPoll(uuid)
         .then((response) => {
@@ -30,8 +31,9 @@ const Vote = () => {
             setCurrPage={setCurrPage} /> : currPage === 1 ? 
             <PollVoteMain pollTitle={election.name} pollDescription={election.description}
             pollOptions={election.questions[0].votes} deadline={election.deadline}
-            setCurrPage={setCurrPage}/> : 
-            <ViewResults />;
+            setCurrPage={setCurrPage} /> : 
+            <ViewResults pollTitle={election.name} pollDescription={election.description}
+            votes={election.questions[0].votes} numVotes={election.hasVoted.length} />;
 
     return (
         <PageLayout>
