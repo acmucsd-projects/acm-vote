@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import VoteCompletePopup from '../VoteCompletePopup/VoteCompletePopup';
+import RankedChoiceOption from '../RankedChoiceOption/RankedChoiceOption';
 import '../PollVoteHome/PollVoteHome.css';
 import './PollVoteMain.css';
 import { notification } from 'antd';
 
 const PollVoteMain = (props) => {
+    const { pollTitle, pollDescription, pollOptions, deadline, pollType, setCurrPage } = props;
     const [selection, setSelection] = useState(-1);
     const [popupVisible, setPopupVisible] = useState(false);
-    const { pollTitle, pollDescription, pollOptions, deadline, pollType, setCurrPage } = props;
+    const [availableOptions, setAvailableOptions] = 
+        useState(
+            [
+                {
+                    id: -1, 
+                    optionName: "Please Select an Option",
+                    description: "",
+                    votes: -1
+                },
+                ...pollOptions
+            ]
+        );
 
     /* Check the deadline again, and check whether the user selected an option */
     const submitVote = () => {
@@ -43,7 +56,14 @@ const PollVoteMain = (props) => {
     })
 
     /* The vote section for ranked choice questions */
-    const rankedChoiceField = <div>Yeet</div>;
+    const rankedChoiceField = pollOptions.map ((option, optionInd) => {
+        return (
+            <div>
+                {optionInd + 1}. 
+                <RankedChoiceOption availableOptions={availableOptions} setAvailableOptions={setAvailableOptions} />
+            </div>
+        )
+    })
 
     /* The mapping between poll types and their corrersponding vote section */
     const voteSectionMapping = {
