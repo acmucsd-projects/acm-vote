@@ -1,7 +1,5 @@
 import axios from 'axios';
 import storage, {tokenGetClaims} from './storage.js';
-
-// I can't seem to find the server URL in the backend just yet:((
 const serverURL = "https://vote.acmucsd.com";
 
 
@@ -52,6 +50,18 @@ export default {
           users:(payload.users === null ? [0]:payload.users)
         }
     }
+
+    return axios(config);
+  },
+
+  getAvailablePolls: function () {
+    const config = {
+      method: "get",
+      url: `${serverURL}/api/election`,
+      headers: {
+        Authorization: `Bearer ${storage.get("token")}`,
+      },
+    };
 
     return axios(config);
   },

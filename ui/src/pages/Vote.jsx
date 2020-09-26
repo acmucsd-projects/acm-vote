@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import PageLayout from '../components/PageLayout/PageLayout';
 import PollVoteHome from '../components/PollVoteHome/PollVoteHome';
 import PollVoteMain from '../components/PollVoteMain/PollVoteMain';
+import ViewResults from './ViewResults';
 import hardCodedPoll from '../data/HardCodedPoll.json';
 // import API from '../API';
 import './style.css';
@@ -11,6 +12,7 @@ const Vote = () => {
     const {uuid} = useParams();
     const [currPage, setCurrPage] = useState(0);
     const [election, setElection] = useState({});
+    const [orderedOptions, setOrderedOptions] = useState([]);
     useEffect(() => {
         /*API.getPoll(uuid)
         .then((response) => {
@@ -26,10 +28,12 @@ const Vote = () => {
     const pageContent = currPage === 0 ? 
             <PollVoteHome pollTitle={election.name} pollId={election.id} 
             pollDescription={election.description} deadline={election.deadline} 
-            setCurrPage={setCurrPage} /> : 
+            setCurrPage={setCurrPage} /> : currPage === 1 ? 
             <PollVoteMain pollTitle={election.name} pollDescription={election.description}
-            pollOptions={election.questions} deadline={election.deadline}
-            setCurrPage={setCurrPage}/>;
+            pollOptions={election.questions[0].votes} deadline={election.deadline}
+            setCurrPage={setCurrPage} /> : 
+            <ViewResults pollTitle={election.name} pollDescription={election.description}
+            votes={election.questions[0].votes} numVotes={election.hasVoted.length} />;
 
     return (
         <PageLayout>

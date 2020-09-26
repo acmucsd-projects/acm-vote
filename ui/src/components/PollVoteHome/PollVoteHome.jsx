@@ -40,9 +40,15 @@ const PollVoteHome = (props) => {
         return currDate.getTime() <= deadlineDate.getTime() ? voteButtonActivated : voteButtonDisabled;
     }
 
+    const viewResults = () => {
+        setCurrPage(2);
+    }
+
     /* The view results button and its functionalities depending on whether the current poll has expired */
     const viewResultsActivated = (
-        <button className="vote-buttons" id="view-results-button-activated" >View Results</button>
+        <button onClick={viewResults} className="vote-buttons" id="view-results-button-activated" >
+            View Results
+        </button>
     )
 
     const notifyResultsUnavailable = () => {
@@ -68,7 +74,7 @@ const PollVoteHome = (props) => {
     return (
         <div className="page-body vote-page-body">
             <h1>{pollTitle}</h1>
-            <p id="poll-id-vote">Poll ID: {pollId}</p>
+            <p className="poll-id-vote">Poll ID: {pollId}</p>
             <p>Vote by: {deadline}</p>
             <p>{pollDescription}</p>
             <div className="vote-buttons-container">

@@ -8,7 +8,7 @@ import {notification} from 'antd';
 import API from '../../API';
 import './PollBody.css';
 
-const PollBody = () => {
+const PollBody = ({uuid}) => {
     const [currPage, setCurrPage] = useState(0);
     const [privacy, setPrivacy] = useState('private');
 
@@ -17,7 +17,10 @@ const PollBody = () => {
     const [pollType, setPollType] = useState("");
     const [pollExpiration, setPollExpiration] = useState();
     const [voters, setVoters] = useState([]);
-    const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
+    const [options, setOptions] = useState([
+        {optionName: "", description:"", votes: 0}, 
+        {optionName:"", description:"", votes: 0}
+    ]);
 
     const [members, setMembers] = useState([])
     const [currentUser, setCurrentUser] = useState({})
