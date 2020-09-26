@@ -3,10 +3,10 @@ import PollBody from '../components/PollBody/PollBody';
 import PageLayout from '../components/PageLayout/PageLayout';
 import './style.css';
 
-const CreatePoll = () => {
+const CreatePoll = ({uuid}) => {
     return (
         <PageLayout>
-            <PollBody />
+            <PollBody uuid={uuid}/>
         </PageLayout>
     );
 }

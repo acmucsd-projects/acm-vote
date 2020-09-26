@@ -13,7 +13,7 @@ const SetAnswerOptions = (props) => {
         );
         setOptions (
             [...options,
-            {optionName:"", description:""}
+            {optionName:"", description:"", votes: 0}
             ]
         );
     }
