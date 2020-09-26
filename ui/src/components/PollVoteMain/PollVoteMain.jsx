@@ -7,7 +7,7 @@ import { notification } from 'antd';
 const PollVoteMain = (props) => {
     const [selection, setSelection] = useState(-1);
     const [popupVisible, setPopupVisible] = useState(false);
-    const { pollTitle, pollDescription, pollOptions, deadline, setCurrPage } = props;
+    const { pollTitle, pollDescription, pollOptions, deadline, pollType, setCurrPage } = props;
 
     /* Check the deadline again, and check whether the user selected an option */
     const submitVote = () => {
@@ -31,7 +31,8 @@ const PollVoteMain = (props) => {
         }
     }
 
-    const optionsSection = pollOptions ? pollOptions.map((option, optionInd) => {
+    /* The vote section for multiple choice questions */
+    const multipleChoiceField = pollOptions.map((option, optionInd) => {
         const optionId = "option" + optionInd;
         return (
             <div className="vote-option-box">
@@ -39,7 +40,18 @@ const PollVoteMain = (props) => {
                 <input type="radio" name="pollOption" id={optionId} onClick={() => setSelection(optionInd)} />
             </div>
         );
-    }) : <div></div>
+    })
+
+    /* The vote section for ranked choice questions */
+    const rankedChoiceField = <div>Yeet</div>;
+
+    /* The mapping between poll types and their corrersponding vote section */
+    const voteSectionMapping = {
+        "multiple-choice" : multipleChoiceField,
+        "ranked-choice" : rankedChoiceField
+    }
+
+    const optionsSection = pollOptions ? voteSectionMapping[pollType] : <div></div>
 
     return (
         <div className="page-body vote-page-body">

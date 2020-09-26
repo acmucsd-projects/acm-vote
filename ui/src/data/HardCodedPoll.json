@@ -21,10 +21,11 @@
                 "description": "I mean you're not wrong",
                 "votes": 5
             }
-        ]
+        ],
+        "voteType": "ranked-choice"
     }],
     "hasVoted": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
     "active": true,
     "creator": 1234567,
-    "deadline": "2020-09-20"
+    "deadline": "2020-09-30"
 }
