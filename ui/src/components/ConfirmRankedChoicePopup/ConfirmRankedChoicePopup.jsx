@@ -1,10 +1,11 @@
 import React from 'react';
 import {notification} from 'antd';
+import API from '../../API';
 import './ConfirmRankedChoicePopup.css';
 
 const ConfirmRankedChoicePopup = (props) => {
 
-    const {confirmationVisible, setConfirmationVisible, 
+    const {pollID, questionID, confirmationVisible, setConfirmationVisible, 
         setPopupVisible, choices, pollOptions, deadline, setCurrPage} = props;
 
     const choiceField = choices ? choices.map((choice, ind) => {
@@ -12,7 +13,7 @@ const ConfirmRankedChoicePopup = (props) => {
             choice != -1 &&
             <div className="ranked-choice-option">
                 <span>{ind + 1}.</span>
-                {pollOptions[choice].optionName}
+                {pollOptions[choice].name}
             </div>
         )
     }) : <div></div> 
@@ -32,8 +33,20 @@ const ConfirmRankedChoicePopup = (props) => {
             });
         }
         else {
-            setConfirmationVisible(false);
-            setPopupVisible(true);
+            const ballots = choices.map((choice) => {
+                const questionPicked = pollOptions.find((element) => element.id === choice);
+                return questionPicked.name;
+            });
+            setConfirmationVisible(false);     
+            API.votePoll(pollID, {
+                [questionID]: ballots, 
+            }, "STV").then(() => {setPopupVisible(true);}).catch((error) => {
+                notification.open({
+                key: "borked-stv-vote-api-call",
+                message: "Could not submit ranked-choice vote!",
+                description: `${error}`, 
+            });
+        });
         }
     }
 

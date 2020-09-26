@@ -17,6 +17,34 @@ export default {
     }
     return axios(conf)
   },
+  
+  getPoll: function(id) {
+    const token = storage.get("token");
+    const config = {
+      method: 'GET',
+      url: `${serverURL}/api/election/${id}`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    };
+
+    return axios(config);
+  },
+
+  votePoll: function(id, payload, type) {
+    const token = storage.get("token");
+    const config = {
+      method: 'POST',
+      url: `${serverURL}/api/election/${id}/vote`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      data: payload,
+    };
+
+    return axios(config);
+  },
+
   getcurrentUser: function(payload) {
     const token = storage.get("token")
     const uuid = tokenGetClaims(token).uuid
