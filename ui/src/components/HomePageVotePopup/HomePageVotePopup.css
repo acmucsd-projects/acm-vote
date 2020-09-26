@@ -11,11 +11,17 @@
     width: 55%;
     height: 100%;
     margin: 0 5% 0 0;
+    border: 2px solid #cccccc;
 }
 
 .homepage-vote-popup button {
     display: inline-block;
-    width: 40%;
+    width: 38%;
+    background-color: #FFD51E;
+    color: white;
+    border: 1px solid #FFD51E;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Responsive for phone screen */
