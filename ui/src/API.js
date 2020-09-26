@@ -1,31 +1,46 @@
-import axios from "axios";
+import axios from 'axios';
+import storage from './storage.js';
+
+// I can't seem to find the server URL in the backend just yet:((
 const serverURL = "https://vote.acmucsd.com";
 
+
 export default {
-  createPoll: function (payload) {
-    const options = payload.options.filter((option) => {
-      return option.optionName && option.description;
-    });
+  getAllUsers: function(payload) {
+    const token = storage.get("token")
 
-    const config = {
-      method: "post",
-      url: `${serverURL}/api/election`,
-      // Help: How do I figure out the ID?
-      id: 10086,
-      name: payload.pollTitle,
-      description: payload.pollDescription,
-      questions: options, // I assume this is options?
-      active: true,
-      creator: 1234567, // Probably need login to be finished for this?
-      deadline: payload.deadline,
-      // What about poll type and voters :0
-    };
-
-    return axios(config);
+    const conf ={
+      method: 'GET',
+      url: `${serverURL}/api/user`,
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+    }
+    return axios(conf)
   },
 
-  getPoll: function (uuid) {
-    return axios.get(`${serverURL}/api/election/${uuid}`);
+  createPoll: function(payload) {
+    const token = storage.get("token")
+
+    const config = {
+        method: 'POST',
+        url: `${serverURL}/api/election`,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        data:{
+          name: payload.pollTitle,
+          description: payload.pollDescription,
+          questions: payload.questions,
+          deadline: payload.deadline,
+          users:(payload.users === null ? [0]:payload.users)
+        }
+    }
+    console.log(config)
+
+    return axios(config);
   },
 
   loginUser: (email, password) => {

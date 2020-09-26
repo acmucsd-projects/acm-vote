@@ -160,12 +160,14 @@ def createNewElection():
         def addElectionFromUserVoteList(x):
             x.canVote = x.canVote + [elect.id]
             return x
-        users = map(addElectionFromUserVoteList, users+[user.id])    
+        users = map(addElectionFromUserVoteList, users)    
         db.session.add_all(users)
         db.session.flush()
     
     else:
-        for u in data['users'] + [user.id]:
+        users =  data['users'] + [user.id] if user.id not in data['users'] else data['users']
+        
+        for u in users:
             user = db.session.query(User).filter_by(id=u).first()
 
             v = user.canVote.copy()

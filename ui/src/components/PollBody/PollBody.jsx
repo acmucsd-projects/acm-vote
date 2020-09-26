@@ -18,6 +18,17 @@ const PollBody = () => {
     const [voters, setVoters] = useState([]);
     const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
 
+    const [members, setMembers] = useState([])
+
+    useEffect(() => {
+        API.getAllUsers().then((response) => {
+            setMembers(response.data)
+        }).catch((error) => {
+            console.log(error)
+        })
+    
+    },[])
+
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options', 'Confirm Details', 'Expiration'];
 
@@ -51,12 +62,42 @@ const PollBody = () => {
 
     /* Top button function: Creating the Poll */
     const createPoll = async() => {
+        let votes = {};
+            options.forEach((option) => { // votes meaning the option array
+            votes[option.optionName] = {
+                "description": option.description
+            }
+        })
+
+        let type = ""
+        if(pollType === "Multiple Choice"){
+            type = "FPTP"
+        }
+        else{
+            type = "STV"
+        }
+
+        // Will probably support multiple questions in the future!
+        const questions = {
+            pollTitle:{
+                answers:votes,
+                type: type
+            }
+        }
+        console.log(voters)
+        console.log(members)
+        const users = (privacy === "private" ? voters.map((voter) => {
+                                                    return voter.id
+                                                }):null)
+        
         const payload = {
             pollTitle: pollTitle,
             pollDescription: pollDescription,
-            options: options,
-            deadline: pollExpiration
+            questions: questions,
+            deadline: pollExpiration,
+            users:users
         }
+        
         await API.createPoll(payload);
         console.log("Yeet");
     }
@@ -105,7 +146,7 @@ const PollBody = () => {
                 setPollType={setPollType} setPollExpiration={setPollExpiration} 
                 privacy={privacy} setPrivacy={setPrivacy}/>
 
-                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} /> 
+                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} members={members}/> 
 
                 <SetAnswerOptions visibility={getVisibility(2)} options={options} setOptions={setOptions}
                 pollTitle={pollTitle} pollDescription={pollDescription} />

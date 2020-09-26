@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import AutoSuggest from 'react-autosuggest';
-import members from '../../data/voters.json';
 import Voter from '../Voter/Voter';
+import API from '../../API';
 import '../PollBody/PollBody.css';
+
 
 const SelectVoters = (props) => {
 const [value, setValue] = useState('');
 const [suggestions, setSuggestions] = useState([]);
 
-    const { visibility, voters, setVoters } = props;
+    const { visibility, voters, setVoters, members } = props;
     /* Autosuggest function to run to get suggestions */
     const getSuggestions = (value) => {
         const inputValue = value.toLowerCase();
