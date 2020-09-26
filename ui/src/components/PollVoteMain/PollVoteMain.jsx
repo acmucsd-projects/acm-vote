@@ -58,8 +58,8 @@ const PollVoteMain = (props) => {
     /* The vote section for ranked choice questions */
     const rankedChoiceField = pollOptions.map ((option, optionInd) => {
         return (
-            <div>
-                {optionInd + 1}. 
+            <div className="ranked-choice-option">
+                <span>{optionInd + 1}. </span>
                 <RankedChoiceOption availableOptions={availableOptions} setAvailableOptions={setAvailableOptions} />
             </div>
         )

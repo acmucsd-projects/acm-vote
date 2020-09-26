@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Menu, Dropdown } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 
 const RankedChoiceOption = (props) => {
     const { availableOptions, setAvailableOptions } = props;
@@ -25,7 +24,7 @@ const RankedChoiceOption = (props) => {
     const optionFields = availableOptions.map((option) => {
         return (
             <Menu.Item>
-                <div className="ranked-choice-option" onClick={() => chooseOption(option)}>
+                <div onClick={() => chooseOption(option)}>
                     {option.optionName} 
                 </div>
             </Menu.Item>
@@ -41,7 +40,7 @@ const RankedChoiceOption = (props) => {
     return (
         <Dropdown overlay={menu}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                {selection ? selection.optionName : "Please Choose an Option"}
+                {selection ? selection.optionName : "Please Select an Option"}
             </a>
         </Dropdown>
     )
