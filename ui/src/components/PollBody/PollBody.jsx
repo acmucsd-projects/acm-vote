@@ -4,6 +4,7 @@ import BasicInformation from '../BasicInformation/BasicInformation';
 import SelectVoters from '../SelectVoters/SelectVoters';
 import SetAnswerOptions from '../SetAnswerOptions/SetAnswerOptions';
 import ConfirmDetails from '../ConfirmDetails/ConfirmDetails';
+import {notification} from 'antd';
 import API from '../../API';
 import './PollBody.css';
 
@@ -25,13 +26,19 @@ const PollBody = () => {
         API.getAllUsers().then((response) => {
             setMembers(response.data)
         }).catch((error) => {
-            console.log(error)
+            notification.open({
+                message: "Cannot get list of potential voters",
+                description: error
+              });
         })
 
         API.getcurrentUser().then((response) => {
             setCurrentUser(response.data.user)
         }).catch((error) => {
-            console.log(error)
+            notification.open({
+                message: "Cannot get current user's information",
+                description: error
+              });
         })
     },[])
 
