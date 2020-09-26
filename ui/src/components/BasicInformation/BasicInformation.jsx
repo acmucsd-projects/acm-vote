@@ -28,7 +28,7 @@ const BasicInformation = (props) => {
 
     const updatePollType = (e) => {
         if (e.target.value === 'multiple-choice') { setPollType('Multiple Choice'); }
-        setPollType('Ranked Choice');
+        else {setPollType('Ranked Choice'); }
     }
 
     // The first page defining basic meeting information

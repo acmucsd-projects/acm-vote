@@ -1,4 +1,5 @@
 import {createBrowserHistory} from "history";
+
 /**
  * @file Manages the storage for the auth tokens.
  * @author ACM @ UCLA
@@ -50,6 +51,20 @@ const LocalStore = {
   },
 };
 
+export const tokenGetClaims = (token) => {
+  if (!token) {
+    return {};
+  }
+  const tokenArray = token.split(".");
+  if (tokenArray.length !== 3) {
+    return {};
+  }
+  return JSON.parse(
+    window.atob(tokenArray[1].replace("-", "+").replace("_", "/"))
+  );
+};
+
 const storage = storageAvailable("localStorage") ? LocalStore : CookieStore;
+
 export const history = createBrowserHistory();
 export default storage;

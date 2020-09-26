@@ -4,6 +4,7 @@ import BasicInformation from '../BasicInformation/BasicInformation';
 import SelectVoters from '../SelectVoters/SelectVoters';
 import SetAnswerOptions from '../SetAnswerOptions/SetAnswerOptions';
 import ConfirmDetails from '../ConfirmDetails/ConfirmDetails';
+import {notification} from 'antd';
 import API from '../../API';
 import './PollBody.css';
 
@@ -20,6 +21,29 @@ const PollBody = ({uuid}) => {
         {optionName: "", description:"", votes: 0}, 
         {optionName:"", description:"", votes: 0}
     ]);
+
+    const [members, setMembers] = useState([])
+    const [currentUser, setCurrentUser] = useState({})
+
+    useEffect(() => {
+        API.getAllUsers().then((response) => {
+            setMembers(response.data)
+        }).catch((error) => {
+            notification.open({
+                message: "Cannot get list of potential voters",
+                description: error
+              });
+        })
+
+        API.getcurrentUser().then((response) => {
+            setCurrentUser(response.data.user)
+        }).catch((error) => {
+            notification.open({
+                message: "Cannot get current user's information",
+                description: error
+              });
+        })
+    },[])
 
     /* Use an array to store page names to make the code more concise :0 */
     const pageNames = ['Create Poll', 'Select Voters', 'Set Answer Options', 'Confirm Details', 'Expiration'];
@@ -54,24 +78,44 @@ const PollBody = ({uuid}) => {
 
     /* Top button function: Creating the Poll */
     const createPoll = async() => {
-        const votes = options.filter(option => {
-            return option.optionName && option.description;
-        })
+        let votes = {};
+        let type = ""
+        if(pollType === "Multiple Choice"){
+            type = "FPTP"
+            options.forEach((option) => { // votes meaning the option array
+                votes[option.optionName] = {
+                    "description": option.description
+                }
+            })
+        }
+        else{
+            type = "STV"
+            votes = []
+            options.forEach((option) => { // votes meaning the option array
+                votes.push({
+                    "name":option.optionName,
+                    "description": option.description
+                })
+            })
+        }
 
         // Will probably support multiple questions in the future!
-        const questions = [{
-            id: 0,
-            question: "Question 0",
-            votes: votes,
-            voteType: pollType
-        }]
-
+        const questions = {
+            [pollTitle]:{
+                answers:votes,
+                type: type
+            }
+        }
+        const users = (privacy === "private" ? voters.map((voter) => {
+                                                    return voter.id
+                                                }):null)
+        
         const payload = {
             pollTitle: pollTitle,
             pollDescription: pollDescription,
             questions: questions,
             deadline: pollExpiration,
-            creator: uuid
+            users:users
         }
         
         await API.createPoll(payload);
@@ -122,7 +166,10 @@ const PollBody = ({uuid}) => {
                 setPollType={setPollType} setPollExpiration={setPollExpiration} 
                 privacy={privacy} setPrivacy={setPrivacy}/>
 
-                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} /> 
+                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} members={members.filter((mem) => {
+                    const uName = currentUser.firstName + " " + currentUser.lastName
+                    return uName !== mem.name
+                })}/> 
 
                 <SetAnswerOptions visibility={getVisibility(2)} options={options} setOptions={setOptions}
                 pollTitle={pollTitle} pollDescription={pollDescription} />
