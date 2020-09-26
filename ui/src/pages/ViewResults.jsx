@@ -5,7 +5,6 @@ import ResultRow from '../components/ResultRow/ResultRow';
 import ResultAudit from '../components/ResultAudit/ResultAudit';
 import '../components/PollVoteHome/PollVoteHome.css';
 import './style.css';
-import { useEffect } from 'react';
 
 const ViewResults = (props) => {
     const [popupVisible, setPopupVisible] = useState(false);

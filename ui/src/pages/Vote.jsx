@@ -31,7 +31,7 @@ const Vote = () => {
             setCurrPage={setCurrPage} /> : currPage === 1 ? 
             <PollVoteMain pollTitle={election.name} pollDescription={election.description}
             pollOptions={election.questions[0].votes} deadline={election.deadline}
-            setCurrPage={setCurrPage} /> : 
+            pollType={election.questions[0].voteType} setCurrPage={setCurrPage} /> : 
             <ViewResults pollTitle={election.name} pollDescription={election.description}
             votes={election.questions[0].votes} numVotes={election.hasVoted.length} />;
 

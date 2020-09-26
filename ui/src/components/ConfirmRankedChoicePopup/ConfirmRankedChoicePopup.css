@@ -1,0 +1,38 @@
+.ranked-choice-confirm-container {
+    position: fixed;
+    width: 70vw;
+    top: 15vh;
+    left: 15vw;
+    z-index: 100;
+    background: white;
+    text-align: center;
+}
+
+.ranked-choice-confirm-content {
+    text-align: left;
+    padding: 10vh 7vw;
+}
+
+#ranked-choice-confirm-button {
+    margin-top: 5vh;
+    width: 56vw;
+    height: 10vh;
+    border-radius: 5vh;
+    font-size: 20px;
+    color: white;
+    background-color: #e981a0;
+    border: 1px solid #e981a0;
+    cursor: pointer;
+}
+
+#ranked-choice-go-back-button {
+    margin-top: 5vh;
+    width: 56vw;
+    height: 10vh;
+    border-radius: 5vh;
+    font-size: 20px;
+    color: white;
+    background-color: #816dff;
+    border: 1px solid #816dff;
+    cursor: pointer;
+}

@@ -7,6 +7,14 @@
     border: 1px solid #816dff;
 }
 
+.ranked-choice-option {
+    margin-bottom: 2.5vh;
+}
+
+.ranked-choice-option span {
+    margin-right: 2vw;
+}
+
 .vote-option-box {
     display: flex;
     font-size: 16px;
