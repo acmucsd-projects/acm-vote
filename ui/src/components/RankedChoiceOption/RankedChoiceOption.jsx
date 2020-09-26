@@ -22,7 +22,6 @@ const RankedChoiceOption = (props) => {
         const choicesCpy = choices.slice();
         choicesCpy[id] = option.id;
         setChoices(choicesCpy);
-        console.log("choices: " + choices);
     } 
 
     const optionFields = availableOptions.map((option) => {
