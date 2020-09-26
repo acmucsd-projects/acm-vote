@@ -52,7 +52,6 @@ export default {
           users:(payload.users === null ? [0]:payload.users)
         }
     }
-    console.log(config)
 
     return axios(config);
   },
