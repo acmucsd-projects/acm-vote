@@ -228,14 +228,14 @@ def getElections():
     if user == None:
         return "ERROR - Claimed user not found", 403
 
-    elects = db.session.query(Election).filter(
-        Election.id.in_(user.canVote), Election.active == True
-    )
-    result = [x.to_json() for x in elects]
     drafts = db.session.query(Election).filter(
         Election.creator == user.id, Election.active == False
     )
-    result += [x.to_json() for x in drafts]
+    result = [x.to_json() for x in drafts]
+    elects = db.session.query(Election).filter(
+        Election.id.in_(user.canVote), Election.active == True
+    )
+    result += [x.to_json() for x in elects]
     return jsonify(result)
 
 
