@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Menu, Dropdown } from 'antd';
 
 const RankedChoiceOption = (props) => {
-    const { availableOptions, setAvailableOptions } = props;
+    const { id, choices, setChoices, availableOptions, setAvailableOptions } = props;
     const [selection, setSelection] = useState(null);
 
     const chooseOption = (option) => {
         if(selection) {availableOptions.push(selection);}
-        setAvailableOptions(
+        setSelection(option);
+        setAvailableOptions (
             [
                 {
                     id: -1, 
@@ -18,7 +19,10 @@ const RankedChoiceOption = (props) => {
                 ...availableOptions.filter((opt) => opt.id != -1 && opt.id != option.id)
             ]
         );
-        setSelection(option);
+        const choicesCpy = choices.slice();
+        choicesCpy[id] = option.id;
+        setChoices(choicesCpy);
+        console.log("choices: " + choices);
     } 
 
     const optionFields = availableOptions.map((option) => {

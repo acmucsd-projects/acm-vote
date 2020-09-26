@@ -4,8 +4,6 @@
 
 .login-button {
     display: block;
-    /* Design peeps: I just did what matched with what Dhruv already has.
-     * Feel free to change the width and stuff per your wishes */
     width: 36%;
     padding: 2vh 0;
     margin: 1vh 32%;
