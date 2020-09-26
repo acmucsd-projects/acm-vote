@@ -15,10 +15,15 @@
                 "optionName": "Milk first",
                 "description": "Welcome to the correct gang >:D",
                 "votes": 10
+            },
+            {
+                "optionName": "Uhhh... You need a bowl first, right?",
+                "description": "I mean you're not wrong",
+                "votes": 5
             }
         ]
     }],
-    "hasVoted": [1,2,3,4,5,6,7,8,9,10,11],
+    "hasVoted": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
     "active": true,
     "creator": 1234567,
     "deadline": "2020-09-20"

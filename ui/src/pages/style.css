@@ -44,10 +44,27 @@
     border: 1px solid #e981a0;
 }
 
+#view-results-audit-button {
+    background-color: #816DFF;
+    border: 1px solid #816DFF;
+}
+
 #view-results-center-content {
     align-content: center;
 }
 
 #num-votes {
     font-size: 30px;
+}
+
+#view-results-table {
+    margin-top: 5vh;
+    width: 50vw;
+    margin-left: 15vw;
+}
+
+#view-results-footers {
+    margin-top: 5vh;
+    width: 80vw;
+    text-align: center;
 }
