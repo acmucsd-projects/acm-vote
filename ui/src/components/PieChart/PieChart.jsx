@@ -31,7 +31,7 @@ const PieChart = (props) => {
     }, [chartCanvas])
 
     return (
-        <div id="pie-chart-wrapper">
+        <div className="pie-chart-wrapper">
             <canvas ref={chartCanvas} />
         </div>
     )
