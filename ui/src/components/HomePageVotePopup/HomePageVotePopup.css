@@ -1,0 +1,27 @@
+.homepage-vote-popup {
+    margin-left: 32.5%;
+    display: flex;
+    width: 35%;
+    height: 5vh;
+    align-content: bottom;
+}
+
+.homepage-vote-popup input {
+    display: inline-block;
+    width: 55%;
+    height: 100%;
+    margin: 0 5% 0 0;
+}
+
+.homepage-vote-popup button {
+    display: inline-block;
+    width: 40%;
+}
+
+/* Responsive for phone screen */
+@media only screen and (max-width: 768px) {
+  .homepage-vote-popup {
+    width: 50%;
+    margin-left: 25%;
+  }
+}
