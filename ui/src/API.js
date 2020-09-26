@@ -1,4 +1,5 @@
 import axios from "axios";
+import storage from "./storage";
 const serverURL = "https://vote.acmucsd.com";
 
 export default {
@@ -26,6 +27,18 @@ export default {
 
   getPoll: function (uuid) {
     return axios.get(`${serverURL}/api/election/${uuid}`);
+  },
+
+  getAvailablePolls: function () {
+    const config = {
+      method: "get",
+      url: `${serverURL}/api/election`,
+      headers: {
+        Authorization: `Bearer ${storage.get("token")}`,
+      },
+    };
+
+    return axios(config);
   },
 
   loginUser: (email, password) => {
