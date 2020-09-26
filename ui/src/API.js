@@ -1,55 +1,68 @@
-import axios from 'axios';
-import storage, {tokenGetClaims} from './storage.js';
+import axios from "axios";
+import storage, {tokenGetClaims} from "./storage.js";
 const serverURL = "https://vote.acmucsd.com";
 
-
 export default {
-  getAllUsers: function(payload) {
-    const token = storage.get("token")
+  getAllUsers: function (payload) {
+    const token = storage.get("token");
 
-    const conf ={
-      method: 'GET',
+    const conf = {
+      method: "GET",
       url: `${serverURL}/api/user`,
       headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    }
-    return axios(conf)
+    };
+    return axios(conf);
   },
-  getcurrentUser: function(payload) {
-    const token = storage.get("token")
-    const uuid = tokenGetClaims(token).uuid
+  getcurrentUser: function (payload) {
+    const token = storage.get("token");
+    const uuid = tokenGetClaims(token).uuid;
 
-    const conf ={
-      method: 'GET',
+    const conf = {
+      method: "GET",
       url: `${serverURL}/api/user/${uuid}`,
       headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    }
-    return axios(conf)
+    };
+    return axios(conf);
   },
 
-  createPoll: function(payload) {
-    const token = storage.get("token")
+  createPoll: function (payload) {
+    const token = storage.get("token");
 
     const config = {
-        method: 'POST',
-        url: `${serverURL}/api/election`,
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
-        data:{
-          name: payload.pollTitle,
-          description: payload.pollDescription,
-          questions: payload.questions,
-          deadline: payload.deadline,
-          users:(payload.users === null ? [0]:payload.users)
-        }
-    }
+      method: "POST",
+      url: `${serverURL}/api/election`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        name: payload.pollTitle,
+        description: payload.pollDescription,
+        questions: payload.questions,
+        deadline: payload.deadline,
+        users: payload.users === null ? [0] : payload.users,
+      },
+    };
+
+    return axios(config);
+  },
+
+  activatePoll: function (payload) {
+    const token = storage.get("token");
+    const config = {
+      method: "PUT",
+      url: `${serverURL}/api/election/${payload}/activate`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
     return axios(config);
   },
