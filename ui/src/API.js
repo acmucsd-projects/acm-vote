@@ -1,5 +1,5 @@
 import axios from 'axios';
-import storage from './storage.js';
+import storage, {tokenGetClaims} from './storage.js';
 
 // I can't seem to find the server URL in the backend just yet:((
 const serverURL = "https://vote.acmucsd.com";
@@ -12,6 +12,20 @@ export default {
     const conf ={
       method: 'GET',
       url: `${serverURL}/api/user`,
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+    }
+    return axios(conf)
+  },
+  getcurrentUser: function(payload) {
+    const token = storage.get("token")
+    const uuid = tokenGetClaims(token).uuid
+
+    const conf ={
+      method: 'GET',
+      url: `${serverURL}/api/user/${uuid}`,
       headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,

@@ -19,6 +19,7 @@ const PollBody = () => {
     const [options, setOptions] = useState([{optionName: "", description:""}, {optionName:"", description:""}]);
 
     const [members, setMembers] = useState([])
+    const [currentUser, setCurrentUser] = useState({})
 
     useEffect(() => {
         API.getAllUsers().then((response) => {
@@ -26,7 +27,12 @@ const PollBody = () => {
         }).catch((error) => {
             console.log(error)
         })
-    
+
+        API.getcurrentUser().then((response) => {
+            setCurrentUser(response.data.user)
+        }).catch((error) => {
+            console.log(error)
+        })
     },[])
 
     /* Use an array to store page names to make the code more concise :0 */
@@ -63,29 +69,33 @@ const PollBody = () => {
     /* Top button function: Creating the Poll */
     const createPoll = async() => {
         let votes = {};
-            options.forEach((option) => { // votes meaning the option array
-            votes[option.optionName] = {
-                "description": option.description
-            }
-        })
-
         let type = ""
         if(pollType === "Multiple Choice"){
             type = "FPTP"
+            options.forEach((option) => { // votes meaning the option array
+                votes[option.optionName] = {
+                    "description": option.description
+                }
+            })
         }
         else{
             type = "STV"
+            votes = []
+            options.forEach((option) => { // votes meaning the option array
+                votes.push({
+                    "name":option.optionName,
+                    "description": option.description
+                })
+            })
         }
 
         // Will probably support multiple questions in the future!
         const questions = {
-            pollTitle:{
+            [pollTitle]:{
                 answers:votes,
                 type: type
             }
         }
-        console.log(voters)
-        console.log(members)
         const users = (privacy === "private" ? voters.map((voter) => {
                                                     return voter.id
                                                 }):null)
@@ -146,7 +156,10 @@ const PollBody = () => {
                 setPollType={setPollType} setPollExpiration={setPollExpiration} 
                 privacy={privacy} setPrivacy={setPrivacy}/>
 
-                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} members={members}/> 
+                <SelectVoters visibility={getVisibility(1)} voters={voters} setVoters={setVoters} members={members.filter((mem) => {
+                    const uName = currentUser.firstName + " " + currentUser.lastName
+                    return uName !== mem.name
+                })}/> 
 
                 <SetAnswerOptions visibility={getVisibility(2)} options={options} setOptions={setOptions}
                 pollTitle={pollTitle} pollDescription={pollDescription} />
