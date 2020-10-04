@@ -31,7 +31,6 @@ const Vote = () => {
                         };
                     });
                     fetchedElection.questions[0].votes.answers = answersList;
-                    console.log("Fetched response: ", fetchedElection);
                 } else if (response.data.questions[0].voteType == "STV") {
                     fetchedElection.questions[0].votes.answers = fetchedElection.questions[0].votes.answers.map((answer, ind) => {
                         return {
@@ -43,19 +42,18 @@ const Vote = () => {
                 console.log("About to update election state");
                 setElection(fetchedElection);
             }).catch((error) => {
-                if (error.status_code === 403) {
-                    notification.open(
+                    notification.open (
                         {
                             key: "no-voting-permission",
                             message: "No Permission",
-                            description: "You don't have permission to vote in this poll. Click on this to go to the home page.",
+                            description: error.message,
                             onClick: () => {
                                 window.location.href = "/";
                             }
                         }
                     )
                 }
-            })
+            )
     }, [])
 
     // I probably can't use the const {name, description} = election here
@@ -70,8 +68,8 @@ const Vote = () => {
                 questionID={election.questions[0].id}
                 pollOptions={election.questions[0].votes.answers} deadline={election.deadline}
                 pollType={election.questions[0].voteType} setCurrPage={setCurrPage} /> :
-            <ViewResults pollTitle={election.name} pollDescription={election.description}
-                votes={election.questions[0].votes} numVotes={election.hasVoted.length} />;
+            <ViewResults pollID={election.id} pollTitle={election.name} pollDescription={election.description}
+                votes={election.questions[0].votes.answers} numVotes={election.hasVoted.length} />;
 
     return (
         <PageLayout>

@@ -1,4 +1,6 @@
- import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../API';
+import {notification} from 'antd';
 // import * as d3 from 'd3';
 import PieChart from '../components/PieChart/PieChart';
 import ResultRow from '../components/ResultRow/ResultRow';
@@ -9,8 +11,20 @@ import './style.css';
 const ViewResults = (props) => {
     const [popupVisible, setPopupVisible] = useState(false);
 
-    const { pollTitle, pollDescription, votes, numVotes } = props;
+    const { pollID, pollTitle, pollDescription, votes, numVotes } = props;
+    const [election, setElection] = useState({});
 
+    useEffect(() => {
+        API.getPollResults(pollID).then((response) => {
+            setElection(response.data);
+        }).catch((error) => {
+            notification.open({
+                key: "results-500",
+                message: "Error getting vote results",
+                description: `${error.message}`,
+              });
+        })
+    }, []);
 
     const colorArray = ['#E981A0', '#816DFF', '#FFD51E'];
 
@@ -24,13 +38,15 @@ const ViewResults = (props) => {
     let optionArray = [];
     let voteData = [];
     orderedVotes.forEach((option) => {
-        optionArray.push(option.optionName);
+        optionArray.push(option.name);
         voteData.push(option.votes);
     })
     
-    const votesTableContent = orderedVotes.map((option, optionInd) => {
+    const votesTableContent = orderedVotes.map((option, optionInd) => 
+    {
+    console.log("orderedVotes:", orderedVotes);
         let percentageString = (option.votes / numVotes * 100).toFixed(2) + "%";
-        return <ResultRow color={colorArray[optionInd]} optionName={option.optionName}
+        return <ResultRow color={colorArray[optionInd]} optionName={option.name}
             percentageString={percentageString} numVotes={option.votes} />
     })
 
@@ -59,7 +75,7 @@ const ViewResults = (props) => {
                         <p>
                             Total: <span id="num-votes">{numVotes}</span> votes
                 </p>
-                        <p>Winner: {orderedVotes[0].optionName}</p>
+                        <p>Winner: {orderedVotes[0].name}</p>
                     </div>
                     <button className="vote-buttons" id="view-results-audit-button" onClick={showAudit}>
                         View Audit

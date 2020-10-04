@@ -24,6 +24,11 @@ const Home = () => {
     window.location.href = "/my-polls";
   };
 
+  const logOut = () => {
+    // storage.remove(token);
+    window.location.href = "/login";
+  }
+
   return (
     <div>
       <div id="home-body">
@@ -41,6 +46,12 @@ const Home = () => {
           className="my-button"
           value="View My Polls"
           onClick={myPolls}
+        />
+        <input
+          type="button"
+          className="logout-button"
+          value="Log Out"
+          onClick={logOut}
         />
       </div>
     </div>
