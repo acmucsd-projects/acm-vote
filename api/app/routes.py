@@ -20,7 +20,7 @@ def getVoterLogin():
     payload = {"email": data["email"], "password": data["password"]}
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/login", data=json.dumps(payload), headers=headers
+        MEMBERSHIP_API + "api/v2/auth/login", data=json.dumps(payload), headers=headers
     ).json()
 
     if r["error"] != None:
@@ -33,7 +33,7 @@ def getVoterLogin():
 
     if result == None:
         info = requests.get(
-            MEMBERSHIP_API + "api/v1/user/" + claim["uuid"],
+            MEMBERSHIP_API + "api/v2/user/" + claim["uuid"],
             headers={"Authorization": f"Bearer {r['token']}"},
         )
         uName = info.json()["user"]["firstName"] + " " + info.json()["user"]["lastName"]
@@ -55,7 +55,7 @@ def getVoterInfo(uuid):
         return "ERROR - No Authorization token provided", 401
 
     r = requests.get(
-        MEMBERSHIP_API + "api/v1/user/" + uuid,
+        MEMBERSHIP_API + "api/v2/user/" + uuid,
         headers={"Authorization": request.headers["Authorization"]},
     )
 
@@ -119,7 +119,7 @@ def createNewElection():
     auth = head["Authorization"]
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
@@ -215,7 +215,7 @@ def getElections():
     auth = head["Authorization"]
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
@@ -291,7 +291,7 @@ def editElection(uuid):
         return "ERROR - Bearer Token not found", 401
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
@@ -463,7 +463,7 @@ def activateElection(uuid):
         return "ERROR - Bearer Token not found", 401
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
@@ -521,7 +521,7 @@ def voteElection(uuid):
     tok = auth.split(" ")[1]
 
     info = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
 
@@ -600,7 +600,7 @@ def getElectionResults(uuid):
     auth = head["Authorization"]
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
@@ -647,7 +647,7 @@ def auditElectionResults(uuid):
     auth = head["Authorization"]
 
     r = requests.post(
-        MEMBERSHIP_API + "api/v1/auth/verification",
+        MEMBERSHIP_API + "api/v2/auth/verification",
         headers={"Authorization": request.headers["Authorization"]},
     )
     if r.json()["authenticated"] == False:
