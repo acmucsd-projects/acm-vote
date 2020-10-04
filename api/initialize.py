@@ -11,7 +11,7 @@ if SEED_DATA :
 
     User.query.delete()
     db.session.commit()
-    r = requests.get(MEMBERSHIP_API + 'api/v1/leaderboard', headers = {"Authorization": f"Bearer {TOKEN}"})
+    r = requests.get(MEMBERSHIP_API + 'api/v2/leaderboard', headers = {"Authorization": f"Bearer {TOKEN}"})
 
 
     leaderboard_user = r.json()
