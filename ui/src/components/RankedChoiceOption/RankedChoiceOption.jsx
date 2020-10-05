@@ -12,7 +12,7 @@ const RankedChoiceOption = (props) => {
             [
                 {
                     id: -1, 
-                    optionName: "Please Select an Option",
+                    name: "Please Select an Option",
                     description: "",
                     votes: -1
                 },
@@ -28,7 +28,7 @@ const RankedChoiceOption = (props) => {
         return (
             <Menu.Item>
                 <div onClick={() => chooseOption(option)}>
-                    {option.optionName} 
+                    {option.name} 
                 </div>
             </Menu.Item>
         )
@@ -43,7 +43,7 @@ const RankedChoiceOption = (props) => {
     return (
         <Dropdown overlay={menu}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                {selection ? selection.optionName : "Please Select an Option"}
+                {selection ? selection.name : "Please Select an Option"}
             </a>
         </Dropdown>
     )

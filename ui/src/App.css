@@ -76,6 +76,10 @@ input[type=button]:hover {
     background: #E981A0;
 }
 
+.logout-button {
+    background: #cccccc;
+}
+
 /* Responsive for phone screen */
 @media only screen and (max-width: 768px) {
   input {

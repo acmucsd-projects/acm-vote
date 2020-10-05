@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 .hidden {
     visibility: hidden;
 }
@@ -65,4 +67,10 @@
     margin-top: 5vh;
     width: 80vw;
     text-align: center;
+}
+
+.audit-results {
+    font-family: 'Roboto Mono', monospace;
+    text-align: center;
+    font-size: 14px;
 }
