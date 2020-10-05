@@ -75,7 +75,7 @@ const PollVoteHome = (props) => {
         <div className="page-body vote-page-body">
             <h1>{pollTitle}</h1>
             <p className="poll-id-vote">Poll ID: {pollId}</p>
-            <p>Vote by: {deadline}</p>
+            <p>Vote by: {deadlineDate ? deadlineDate.toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}) : deadline}</p>
             <p>{pollDescription}</p>
             <div className="vote-buttons-container">
                 {voteButton()}

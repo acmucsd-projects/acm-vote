@@ -14,7 +14,9 @@ const VoteCompletePopup = (props) => {
     return (
         <div className="vote-complete-popup-container">
             <div className="vote-complete-popup-content">
-                <p> {auditMessage}</p>
+                <div className="audit-results">
+                    <p> {auditMessage} </p>
+                </div>
                 <button id="vote-complete-return-home-button" onClick={closePopup}>Close</button>
             </div>
         </div>

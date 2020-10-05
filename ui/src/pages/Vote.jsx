@@ -70,8 +70,10 @@ const Vote = () => {
                 questionID={election.questions[0].id}
                 pollOptions={election.questions[0].votes.answers} deadline={election.deadline}
                 pollType={election.questions[0].voteType} setCurrPage={setCurrPage} /> :
-            <ViewResults pollID={election.id} pollTitle={election.name} pollDescription={election.description}
-                votes={election.questions[0].votes.answers} numVotes={election.hasVoted.length} />;
+            <ViewResults pollID={election.id} pollTitle={election.name} 
+                pollDescription={election.description} pollType={election.questions[0].voteType}
+                votes={election.questions[0].votes.answers} pollResults={election.questions[0].votes.results} 
+                numVotes={election.hasVoted.length} />;
 
     return (
         <PageLayout>
