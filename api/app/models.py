@@ -21,7 +21,7 @@ class Election(db.Model):
             "name": self.name,
             "description": self.description,
             "questions": self.questions,
-            "hasVoted": str(self.hasVoted),
+            "hasVoted": self.hasVoted,
             "active": self.active,
             "creator": self.creator,
             "deadline": self.deadline.isoformat(),
@@ -61,6 +61,6 @@ class User(db.Model):
         return {
             "id": self.id,
             "userName": self.userName,
-            "canVote": str(self.canVote),
+            "canVote": self.canVote,
             "boardMember": self.boardMember,
         }
