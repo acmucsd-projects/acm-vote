@@ -32,13 +32,6 @@
     margin-right: 30%;
 }
 
-@media only screen and (max-width: 768px) {
-    .login-button {
-        width: 50%;
-        margin: 1vh 25%;
-    }
-}
-
 #view-results-go-home-button {
     background-color: #e981a0;
     border: 1px solid #e981a0;
@@ -73,4 +66,16 @@
     font-family: 'Roboto Mono', monospace;
     text-align: center;
     font-size: 14px;
+}
+
+@media only screen and (max-width: 768px) {
+    .login-button {
+        width: 50%;
+        margin: 1vh 25%;
+    }
+
+    #view-results-table {
+        margin-left: 0;
+        width: 80vw;
+    }
 }
