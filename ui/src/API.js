@@ -16,10 +16,63 @@ export default {
     };
     return axios(conf);
   },
-  getcurrentUser: function (payload) {
+  
+  getPoll: function(id) {
     const token = storage.get("token");
-    const uuid = tokenGetClaims(token).uuid;
+    const config = {
+      method: 'GET',
+      url: `${serverURL}/api/election/${id}`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    };
 
+    return axios(config);
+  },
+
+  votePoll: function(id, payload, type) {
+    const token = storage.get("token");
+    const config = {
+      method: 'POST',
+      url: `${serverURL}/api/election/${id}/vote`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      data: payload,
+    };
+
+    return axios(config);
+  },
+
+  getPollResults: function(id) {
+    const token = storage.get("token");
+    const config = {
+      method: 'GET',
+      url: `${serverURL}/api/election/${id}/results`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    };
+
+    return axios(config);
+  },
+
+  getPollAudit: function(id) {
+    const token = storage.get("token");
+    const config = {
+      method: 'GET',
+      url: `${serverURL}/api/election/${id}/audit`,
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    };
+
+    return axios(config);
+  },
+
+  getcurrentUser: function(payload) {
+    const token = storage.get("token")
+    const uuid = tokenGetClaims(token).uuid
     const conf = {
       method: "GET",
       url: `${serverURL}/api/user/${uuid}`,

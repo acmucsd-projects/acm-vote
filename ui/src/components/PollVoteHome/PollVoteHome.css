@@ -11,6 +11,7 @@
 }
 
 .vote-page-body h1 {
+    line-height: normal;
     margin-bottom: 5vh;
 }
 

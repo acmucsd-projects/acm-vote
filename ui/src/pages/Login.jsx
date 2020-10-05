@@ -31,7 +31,7 @@ function Login() {
           notification.open({
             key: "login-500",
             message: "Error logging in",
-            description: `${loginResponse.data.error}`,
+            description: `${loginResponse.data.error.message}`,
           });
           return;
         }
