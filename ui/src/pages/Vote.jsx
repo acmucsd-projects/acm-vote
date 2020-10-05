@@ -41,6 +41,8 @@ const Vote = () => {
                 }
                 console.log("About to update election state");
                 setElection(fetchedElection);
+                console.log("Election: ");
+                console.log(fetchedElection);
             }).catch((error) => {
                     notification.open (
                         {

@@ -9,15 +9,18 @@ import '../components/PollVoteHome/PollVoteHome.css';
 import './style.css';
 
 const ViewResults = (props) => {
-    const [popupVisible, setPopupVisible] = useState(false);
-
     const { pollID, pollTitle, pollDescription, votes, numVotes } = props;
-    const [election, setElection] = useState({});
+
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [auditMessage, setAuditMessage] = useState("");
 
     useEffect(() => {
-        API.getPollResults(pollID).then((response) => {
-            setElection(response.data);
-        }).catch((error) => {
+        API.getPollAudit(pollID)
+        .then(response => {
+            console.log("audit: " + JSON.stringify(response.data[pollTitle]));
+            setAuditMessage(response.data[pollTitle].audit);
+        })
+        .catch((error) => {
             notification.open({
                 key: "results-500",
                 message: "Error getting vote results",
@@ -85,7 +88,7 @@ const ViewResults = (props) => {
                 </button>
                 </div>
             </div>
-            <ResultAudit popupVisible={popupVisible} setPopupVisible={setPopupVisible} />
+            <ResultAudit auditMessage={auditMessage} popupVisible={popupVisible} setPopupVisible={setPopupVisible} />
         </div>
     )
 }
